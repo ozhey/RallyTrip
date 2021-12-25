@@ -1,6 +1,6 @@
 .show-tree {
-    max-height: 380px;
-    height: 380px;
+    max-height: 336px; /* 42 x number of child elements (categories) */
+    height: 336px;
     transition: 0.5s ease-out;
 }
 
