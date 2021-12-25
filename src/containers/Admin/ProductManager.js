@@ -100,8 +100,8 @@ const ProductManager = ({ action }) => {
     // After the current product id changes, we will change the fields accordingly
     useEffect(() => {
         if (currentProductId) {
-            const { title = '', description = '', price = 0, stock = 0, category = '', subcategory = '', priority = 0 } = productsInfo[currentProductId];
-            reset({ title, description, price, stock, category, subcategory, priority }); // insert product's values to the form fields
+            const { title = '', description = '', price = 0, stock = 0, category = '', subcategory = '', priority = 0, hide = false } = productsInfo[currentProductId];
+            reset({ title, description, price, stock, category, subcategory, priority, hide }); // insert product's values to the form fields
             fireDb.ref(`quill/${currentProductId}`).once('value', snapshot => {
                 if (snapshot.val() != null) {
                     setEditorValue(snapshot.val())
@@ -173,6 +173,7 @@ const ProductManager = ({ action }) => {
                         <select name="subcategory" ref={register({ required: true })}>
                             {link.routes.map(subLink => <option key={subLink.path} value={subLink.path.slice(subLink.path.lastIndexOf('/') + 1)}>{subLink.name}</option>)}
                         </select>
+                        {errors.subcategory && <span className="error">יש לציין תת קטגוריה</span>}
                     </>
                     )
                 } else {
@@ -180,7 +181,7 @@ const ProductManager = ({ action }) => {
                 }
             }
         })
-    }, [categorySelectedProd, register])
+    }, [categorySelectedProd, register, errors.subcategory])
 
     return (
         <article>
@@ -224,6 +225,8 @@ const ProductManager = ({ action }) => {
                     {errors.stock && <span className="error">יש להכניס מספר מוצרים במלאי</span>}
                     <label> עדיפות (מוצר בעל ערך גבוה יוצג יותר למעלה)</label>
                     <input type='number' name="priority" ref={register} placeholder="עדיפות" />
+                    <label> הסתר מוצר </label>
+                    <input type='checkbox' name='hide' ref={register} />
                     <label>תמונה</label>
                     <ImageUploader product={productsInfo[currentProductId]} uploadedImage={uploadedImage} register={register} />
                     <label style={{ padding: '5px 0px 7px' }}>מידע נוסף</label>

@@ -30,10 +30,12 @@ const Products = () => {
     // This hook is used for filtering
     useEffect(() => {
         let productsTemp = Object.keys(information)
-            .filter((id) => (!category ||
+            .filter((id) => (
+                (!category ||
                 (category === information[id].category && !subcategory) ||
-                subcategory === information[id].subcategory))
-            //sort by the priority field
+                (subcategory === information[id].subcategory)) &&
+                information[id].hide !== true
+                ))
             .sort((idA, idB) => parseInt((information[idB].priority) || 0) - (parseInt(information[idA].priority) || 0))
             .map(id => <ProductPreview key={id} product={information[id]} id={id} />)
         setProducts(productsTemp);
