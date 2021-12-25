@@ -22,9 +22,9 @@ const links = [
     {
         path: '/products/communicators', name: 'דיבוריות', routes : []
     },
-    {
-        path: '/products/towers', name: 'מגדלי ניווט', routes : []
-    },
+    // {
+    //     path: '/products/towers', name: 'מגדלי ניווט', routes : []
+    // },
     {
         path: '/products/wheels', name: 'גלגלים', routes : []
     },
