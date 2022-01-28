@@ -100,8 +100,8 @@ const ProductManager = ({ action }) => {
     // After the current product id changes, we will change the fields accordingly
     useEffect(() => {
         if (currentProductId) {
-            const { title = '', description = '', price = 0, stock = 0, category = '', subcategory = '', priority = 0, hide = false } = productsInfo[currentProductId];
-            reset({ title, description, price, stock, category, subcategory, priority, hide }); // insert product's values to the form fields
+            const { title = '', description = '', price = 0, stock = 0, category = '', subcategory = '', priority = 0, hide = false, discount = ""} = productsInfo[currentProductId];
+            reset({ title, description, price, stock, category, subcategory, priority, hide, discount }); // insert product's values to the form fields
             fireDb.ref(`quill/${currentProductId}`).once('value', snapshot => {
                 if (snapshot.val() != null) {
                     setEditorValue(snapshot.val())
