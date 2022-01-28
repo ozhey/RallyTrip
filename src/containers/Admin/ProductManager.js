@@ -212,7 +212,7 @@ const ProductManager = ({ action }) => {
                     <input type='number' name="price" ref={register({ required: true })} placeholder="מחיר" />
                     {errors.price && <span className="error">יש לציין מחיר. כדי שיופיע "צור קשר לקבלת מחיר", יש לציין מחיר 0</span>}
                     <label>מחיר מבצע</label>
-                    <input type='number' name="discount" ref={register} placeholder="מחיר מבצע" />
+                    <input type='text' name="discount" ref={register} placeholder="מחיר מבצע" />
                     <label>תיאור</label>
                     <textarea name="description" ref={register} placeholder="תיאור" />
                     <label>קטגוריה</label>

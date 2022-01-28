@@ -10,13 +10,13 @@ import { fireDb } from "../../firebase";
 import './Product.css';
 
 const ProductPage = ({ product = {}, id }) => {
-    const { title = '', description = '', price = 0, stock = 0, image = '', discount = 0 } = product;
+    const { title = '', description = '', price = 0, stock = 0, image = '', discount = "" } = product;
     const [quillData, setQuillData] = useState('');
 
     let priceTag;
-    if (price > 0 && discount > 0 && parseInt(discount) < parseInt(price)) {
+    if (price > 0 && discount !== "") {
         priceTag = <>
-            <div className='price'>{`הנחה! ₪${discount} בלבד`}</div>
+            <div className='price'>{discount}</div>
             <div style={{ textDecoration: 'line-through', paddingRight: '7px' }}>{`₪${price}`}</div>
         </>
     } else if (price > 0) {

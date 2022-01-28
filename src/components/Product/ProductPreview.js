@@ -1,12 +1,12 @@
-import React from 'react';
+    import React from 'react';
 import { Link } from 'react-router-dom';
 import './Product.css';
 
 const ProductPreview = ({ product, id }) => {
-    const { image, title, price = 0, category, subcategory, discount = 0 } = product;
+    const { image, title, price = 0, category, subcategory, discount = ""} = product;
     let priceTag;
-    if (price > 0 && discount > 0 && parseInt(discount) < parseInt(price)) {
-        priceTag = <div style={{ color: 'red', fontWeight: 'bold', fontSize: '17px', marginBottom: '10px' }}>{`מבצע! ₪${discount}`}</div>
+    if (discount !== "") {
+        priceTag = <div style={{ color: 'red', fontWeight: 'bold', fontSize: '17px', marginBottom: '10px' }}>{discount}</div>
     } else if (price > 0) {
         priceTag = <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>{`₪${price}`}</div>
     } else {
