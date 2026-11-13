@@ -1,51 +1,70 @@
 1:"$Sreact.fragment"
-2:"/_next/static/chunks/0jd54b7daf8tw.js"
+2:"/_next/static/chunks/0bi7zo8_ed5d8.js"
 3:I[87487,["$2"],"default"]
 4:I[39756,["$2"],"default"]
-5:"/_next/static/chunks/3rg6h34m87i8w.js"
+5:"/_next/static/chunks/3nj2dj-xh-27e.js"
 6:I[60542,["$2","$5"],"default"]
 7:I[37457,["$2"],"default"]
-16:"ViewportBoundary"
-17:I[97367,["$2"],"$16"]
-18:"MetadataBoundary"
-19:I[97367,["$2"],"$18"]
-1a:"$Sreact.suspense"
-:HL["/_next/static/chunks/1b77tr28s46yi.css","style"]
-:HL["/_next/static/chunks/44yjgybm14mg3.css","style"]
-:HL["/_next/static/chunks/3522h_cxk2j2x.css","style"]
+8:I[22016,["$2"],""]
+1a:"ViewportBoundary"
+1b:I[97367,["$2"],"$1a"]
+1c:"MetadataBoundary"
+1d:I[97367,["$2"],"$1c"]
+1e:"$Sreact.suspense"
+:HL["/_next/static/chunks/2_94dctupaj1x.css","style"]
+:HL["/_next/static/chunks/1du0q8whzh4wa.css","style"]
+:HL["/_next/static/chunks/0tkrpf4-tvpro.css","style"]
 :HL["/_next/static/media/WhatsApp.1cesidbvqioxt.png","image"]
 :HL["/_next/static/media/Facebook.1lxo7_o8ca2bk.png","image"]
 :HL["/_next/static/media/Mail.1h1d172pjc8rw.png","image"]
+a:X
+d:X
+d:C
+e:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","div",null,{"className":"page-container","children":[["$","header",null,{"className":"page-header","children":[["$","h1",null,{"children":"ראלי רייד בחו\"ל"}],["$","p",null,{"children":"ליווי מקצה לקצה למרוצים בינלאומיים, ממקצוענים ועד חובבנים"}]]}],["$","article",null,{"className":"abroad-container","children":[["$","section",null,{"className":"abroad-intro","children":["$Lf","$L10"]}],"$L11","$L12","$L13","$L14"]}]]}],["$L15","$L16","$L17"],"$L18"]}],"p":"$@19","v":null,"s":"$a"}}]]
+b:[["children",{"s":"rally-abroad","h":96,"d":{"r":["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","template":["$","$L7",null,{}]}]]}],"p":"$@c","v":"$d","s":"$a"},"c":"$Qe"}]]
+0:{"t":{"t":{"s":"","h":80,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/2_94dctupaj1x.css","precedence":"next"}],["$","link","1",{"rel":"stylesheet","href":"/_next/static/chunks/1du0q8whzh4wa.css","precedence":"next"}],["$","link","2",{"rel":"stylesheet","href":"/_next/static/chunks/0tkrpf4-tvpro.css","precedence":"next"}],["$","script","script-0",{"src":"/_next/static/chunks/0bi7zo8_ed5d8.js","async":true}]],["$","html",null,{"lang":"he","dir":"rtl","children":[["$","head",null,{"children":["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){var h=location.hash;if(h&&h.indexOf('#/')===0){var p=h.slice(1).replace(/\\/+$/,'');location.replace(p+'/');}})();"}}]}],["$","body",null,{"children":[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"Rally Trip\",\"alternateName\":\"ראלי טריפ\",\"url\":\"https://www.rallytrip.com\",\"logo\":\"https://www.rallytrip.com/logo512.png\",\"telephone\":\"+972505562519\",\"email\":\"119raz@walla.com\",\"sameAs\":[\"https://www.facebook.com/RallyTrip\"]}"}}],["$","main",null,{"className":"main","children":[["$","$L3",null,{}],["$","$L4",null,{"parallelRouterKey":"children","error":"$6","errorStyles":[],"errorScripts":[["$","script","script-0",{"src":"/_next/static/chunks/3nj2dj-xh-27e.js","async":true}]],"template":["$","$L7",null,{}],"notFound":[["$","div",null,{"className":"page-container status-page","children":[["$","div",null,{"className":"status-code","children":"404"}],["$","h1",null,{"children":"הדף לא נמצא"}],["$","p",null,{"children":"ייתכן שהקישור שגוי או שהדף הוסר."}],["$","div",null,{"className":"status-actions","children":[["$","$L8",null,{"href":"/","className":"btn btn--primary","children":"לדף הבית"}],["$","$L8",null,{"href":"/products/","className":"btn btn--light","children":"לכל המוצרים"}]]}]]}],[]]}],["$","footer",null,{"className":"footer","children":[["$","div",null,{"className":"container footer-grid","children":[["$","div",null,{"className":"footer-brand","children":[["$","img",null,{"src":"/_next/static/media/logoGlow.1bjcbc_7rjnh8.png","alt":"Rally Trip","className":"footer-logo","width":112,"height":45,"loading":"lazy"}],["$","p",null,{"children":"השער שלך לעולם הראלי רייד. ציוד ניווט, הדרכות וליווי למרוצים בחו\"ל."}]]}],["$","nav",null,{"className":"footer-links","aria-label":"ניווט תחתון","children":[["$","p",null,{"className":"footer-title","children":"ניווט"}],["$","ul",null,{"children":[["$","li",null,{"children":["$","$L8",null,{"href":"/products/","children":"מוצרים"}]}],["$","li",null,{"children":["$","$L8",null,{"href":"/nav-guide/","children":"הדרכות ניווט"}]}],["$","li",null,{"children":["$","$L8",null,{"href":"/rally-abroad/","children":"מרוצים בחו\"ל"}]}]]}]]}],["$","div",null,{"className":"footer-contact","children":[["$","p",null,{"className":"footer-title","children":"רז הימן"}],["$","ul",null,{"children":[["$","li",null,{"children":["$","a",null,{"href":"tel:+972505562519","dir":"ltr","children":"050-5562-519"}]}],["$","li",null,{"children":["$","a",null,{"href":"mailto:119raz@walla.com","children":"119raz@walla.com"}]}]]}],["$","div",null,{"className":"footer-social","children":[["$","a",null,{"href":"https://wa.me/972505562519","children":["$","img",null,{"src":"/_next/static/media/WhatsApp.1cesidbvqioxt.png","alt":"WhatsApp","className":"icon"}]}],["$","a",null,{"href":"https://www.facebook.com/RallyTrip","children":["$","img",null,{"src":"/_next/static/media/Facebook.1lxo7_o8ca2bk.png","alt":"Facebook","className":"icon"}]}],["$","a",null,{"href":"mailto:119raz@walla.com","children":["$","img",null,{"src":"/_next/static/media/Mail.1h1d172pjc8rw.png","alt":"Mail","className":"icon"}]}]]}]]}]]}],["$","div",null,{"className":"container footer-bottom","children":[["$","div",null,{"children":"© כל הזכויות שמורות ל-Rally Trip"}],["$","div",null,{"className":"credit","children":["$","a",null,{"href":"https://www.linkedin.com/in/oz-heymann-2193901a6/","children":"Developed by Oz Heymann"}]}]]}]]}]]}]]}]]}]]}],"p":"$@9","v":null,"s":"$a"},"c":"$Qb"},"h":{"r":["$","$1","h",{"children":[null,["$","$L1b",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#000000"}]]}],["$","$L1d",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1e",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"ראליים בחו\"ל | Rally Trip"}],["$","meta","1",{"name":"description","content":"רז הימן מוציא קבוצות ויחידים למרוצים בין לאומיים בחו\"ל"}],["$","meta","2",{"name":"application-name","content":"Rally Trip"}],"$L1f","$L20","$L21","$L22","$L23","$L24","$L25","$L26","$L27","$L28","$L29","$L2a","$L2b","$L2c","$L2d","$L2e","$L2f","$L30","$L31"]}]}],null]}],null]}],"p":"$@32","v":null,"s":"$a"}},"a":"$@33","u":"$@34","b":"ZKYV3kkgs27YIb5AQYfNR"}
+35:"/_next/static/chunks/0apj9sk62zkhc.js"
+36:I[56469,["$2","$35"],"default"]
+37:I[97367,["$2"],"OutletBoundary"]
+39:I[27201,["$2"],"IconMark"]
 :HL["/_next/static/media/raz.3ldj_9p_a74l8.png","image"]
-9:X
-c:X
-c:C
-d:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","div",null,{"className":"page-container","children":[["$","h1",null,{"style":{"textAlign":"center","padding":"15px 0px 20px"},"children":"ראלי רייד בחו\"ל"}],["$","article",null,{"className":"abroad-container","children":[["$","h3",null,{"children":"\"אחרי 30 שנה של השתתפות בראליים בעולם, אני יודע להגיד בוודאות שגם את/ה יכול/ה לחוות ולהנות מראלי רייד בחו\"ל.\""}],["$","img",null,{"src":"/_next/static/media/raz.3ldj_9p_a74l8.png","alt":"רז הימן","className":"raz-image"}],["$","p",null,{"children":"רז הימן השתתף כרוכב, נהג ונווט בעשרות מרוצים בין לאומיים על אופנוע, רכב וSBS, ביניהם ראלי דקאר, דרך המשי, באחה 1000, מרוקו, פרעונים ועוד רבים נוספים. "}],["$","p",null,{"children":"רז ניהל וליווה קבוצות ויחידים במרוצים רבים, ביניהם מרוצי ראלי רייד באירופה, מרוצי ISDE, מוטוקרוס האומות, מרוצי הארד אנדורו ועוד."}],["$","p",null,{"children":"ראליים בחו\"ל לא מיועדים רק לרוכבים ונהגים מקצועיים ורבי נסיון. השתתפות בראלי בחו\"ל היא חוויה שכל אחד יכול להנות ממנה, ממקצוענים ועד חובבנים.  "}],["$","p",null,{}],["$","h4",null,{"children":"מה אני מציע? טיפול מקצה לקצה:"}],["$","ul",null,{"className":"list","children":[["$","li",null,{"children":"הרשמה"}],["$","li",null,{"children":"שילוח הכלים מהארץ"}],["$","li",null,{"children":"טיסות"}],["$","li",null,{"children":"לינה"}],["$","li",null,{"children":"ייעוץ מקצועי"}],["$","li",null,{"children":"ליווי קבוצתי או אישי לפני ובזמן המרוץ"}],["$","li",null,{"children":"ועוד.."}]]}],["$","h2",null,{"style":{"padding":"10px 0px","fontSize":"2em"},"children":"הראלי הקרוב"}],["$","div",null,{"className":"quill","children":["$","div",null,{"className":"ql-container ql-bubble ql-disabled","children":[["$","div",null,{"className":"ql-editor","dangerouslySetInnerHTML":{"__html":"<p class=\"ql-align-right\">פרטים בקרוב..</p>"}}],"$Le"]}]}],"$Lf","$L10"]}]]}],["$L11","$L12","$L13"],"$L14"]}],"p":"$@15","v":null,"s":"$9"}}]]
-a:[["children",{"s":"rally-abroad","h":96,"d":{"r":["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","template":["$","$L7",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
-0:{"t":{"t":{"s":"","h":80,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/1b77tr28s46yi.css","precedence":"next"}],["$","link","1",{"rel":"stylesheet","href":"/_next/static/chunks/44yjgybm14mg3.css","precedence":"next"}],["$","link","2",{"rel":"stylesheet","href":"/_next/static/chunks/3522h_cxk2j2x.css","precedence":"next"}],["$","script","script-0",{"src":"/_next/static/chunks/0jd54b7daf8tw.js","async":true}]],["$","html",null,{"lang":"he","dir":"rtl","children":[["$","head",null,{"children":["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){var h=location.hash;if(h&&h.indexOf('#/')===0){var p=h.slice(1).replace(/\\/+$/,'');location.replace(p+'/');}})();"}}]}],["$","body",null,{"children":[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"Rally Trip\",\"alternateName\":\"ראלי טריפ\",\"url\":\"https://www.rallytrip.com\",\"logo\":\"https://www.rallytrip.com/logo512.png\",\"telephone\":\"+972505562519\",\"email\":\"119raz@walla.com\",\"sameAs\":[\"https://www.facebook.com/RallyTrip\"]}"}}],["$","main",null,{"className":"main","children":[["$","$L3",null,{}],["$","$L4",null,{"parallelRouterKey":"children","error":"$6","errorStyles":[],"errorScripts":[["$","script","script-0",{"src":"/_next/static/chunks/3rg6h34m87i8w.js","async":true}]],"template":["$","$L7",null,{}],"notFound":[["$","div",null,{"className":"page-container","children":"הדף לא נמצא"}],[]]}],["$","section",null,{"className":"footer","children":[["$","div",null,{"className":"icons-container","children":[["$","div",null,{"children":"רז הימן"}],["$","div",null,{"children":[["$","a",null,{"href":"https://wa.me/972505562519","children":["$","img",null,{"src":"/_next/static/media/WhatsApp.1cesidbvqioxt.png","alt":"WhatsApp","className":"icon"}]}],["$","a",null,{"href":"https://www.facebook.com/RallyTrip","children":["$","img",null,{"src":"/_next/static/media/Facebook.1lxo7_o8ca2bk.png","alt":"Facebook","className":"icon"}]}],["$","a",null,{"href":"mailto:119raz@walla.com","children":["$","img",null,{"src":"/_next/static/media/Mail.1h1d172pjc8rw.png","alt":"Mail","className":"icon"}]}]]}],["$","div",null,{"children":"© כל הזכויות שמורות לRally Trip"}]]}],["$","div",null,{"className":"credit","children":["$","a",null,{"href":"https://www.linkedin.com/in/oz-heymann-2193901a6/","children":"Developed by Oz Heymann"}]}]]}]]}]]}]]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L17",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#000000"}]]}],["$","$L19",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1a",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"ראליים בחו\"ל | Rally Trip"}],["$","meta","1",{"name":"description","content":"רז הימן מוציא קבוצות ויחידים למרוצים בין לאומיים בחו\"ל"}],["$","meta","2",{"name":"application-name","content":"Rally Trip"}],["$","link","3",{"rel":"manifest","href":"/manifest.json"}],["$","link","4",{"rel":"canonical","href":"https://www.rallytrip.com/rally-abroad/"}],["$","meta","5",{"property":"og:title","content":"Rally Trip ראלי טריפ"}],["$","meta","6",{"property":"og:description","content":"ראלי טריפ עוסקת במכירת מוצרים הקשורים לעולם הראלי רייד (ספרי דרך, סיפורי דרך, גרמין, גופרו, מדי מרחק), בהדרכות ניווט ובהוצאת קבוצות למרוצים בחול"}],["$","meta","7",{"property":"og:site_name","content":"Rally Trip"}],["$","meta","8",{"property":"og:locale","content":"he_IL"}],["$","meta","9",{"property":"og:image","content":"https://www.rallytrip.com/logo512.png"}],["$","meta","10",{"property":"og:image:width","content":"512"}],["$","meta","11",{"property":"og:image:height","content":"512"}],["$","meta","12",{"property":"og:type","content":"website"}],["$","meta","13",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","14",{"name":"twitter:title","content":"Rally Trip ראלי טריפ"}],["$","meta","15",{"name":"twitter:description","content":"ראלי טריפ עוסקת במכירת מוצרים הקשורים לעולם הראלי רייד (ספרי דרך, סיפורי דרך, גרמין, גופרו, מדי מרחק), בהדרכות ניווט ובהוצאת קבוצות למרוצים בחול"}],["$","meta","16",{"name":"twitter:image","content":"https://www.rallytrip.com/logo512.png"}],["$","meta","17",{"name":"twitter:image:width","content":"512"}],"$L1b","$L1c","$L1d","$L1e"]}]}],null]}],null]}],"p":"$@1f","v":null,"s":"$9"}},"a":"$@20","u":"$@21","b":"_DRjSbRwceDCghMVFstXz"}
-22:"/_next/static/chunks/3kezbcaqy8enx.js"
-23:I[56469,["$2","$22"],"default"]
-24:I[97367,["$2"],"OutletBoundary"]
-26:I[27201,["$2"],"IconMark"]
-:HL["/_next/static/chunks/2ln1vav8ki18k.css","style"]
-:HL["/_next/static/chunks/2ojur20e3-7mx.css","style"]
-e:["$","div",null,{"className":"ql-clipboard","aria-hidden":"true","children":["$","br",null,{}]}]
-f:["$","h4",null,{"children":"לפרטים נוספים:"}]
-10:["$","div",null,{"children":["$","$L23",null,{"alignRight":true,"withIcons":true}]}]
-11:["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/2ln1vav8ki18k.css","precedence":"next"}]
-12:["$","link","1",{"rel":"stylesheet","href":"/_next/static/chunks/2ojur20e3-7mx.css","precedence":"next"}]
-13:["$","script","script-0",{"src":"/_next/static/chunks/3kezbcaqy8enx.js","async":true}]
-14:["$","$L24",null,{"children":["$","$1a",null,{"name":"Next.MetadataOutlet","children":"$@25"}]}]
-1b:["$","meta","18",{"name":"twitter:image:height","content":"512"}]
-1c:["$","link","19",{"rel":"icon","href":"/favicon.ico"}]
-1d:["$","link","20",{"rel":"apple-touch-icon","href":"/logo192.png"}]
-1e:["$","$L26","21",{}]
-9:300
-25:null
-21:true
-9:C
-20:0
-b:"$undefined"
-8:"$undefined"
-1f:"$undefined"
-15:"$undefined"
+:HL["/_next/static/chunks/3u2-n4ml14m3j.css","style"]
+:HL["/_next/static/chunks/26pjix73ei6t0.css","style"]
+f:["$","div",null,{"className":"abroad-text","children":[["$","blockquote",null,{"className":"abroad-quote","children":"\"אחרי 30 שנה של השתתפות בראליים בעולם, אני יודע להגיד בוודאות שגם את/ה יכול/ה לחוות ולהנות מראלי רייד בחו\"ל.\""}],["$","p",null,{"children":"רז הימן השתתף כרוכב, נהג ונווט בעשרות מרוצים בין לאומיים על אופנוע, רכב ו-SBS, ביניהם ראלי דקאר, דרך המשי, באחה 1000, מרוקו, פרעונים ועוד רבים נוספים."}],["$","p",null,{"children":"רז ניהל וליווה קבוצות ויחידים במרוצים רבים, ביניהם מרוצי ראלי רייד באירופה, מרוצי ISDE, מוטוקרוס האומות, מרוצי הארד אנדורו ועוד."}],["$","p",null,{"children":"ראליים בחו\"ל לא מיועדים רק לרוכבים ונהגים מקצועיים ורבי נסיון. השתתפות בראלי בחו\"ל היא חוויה שכל אחד יכול להנות ממנה, ממקצוענים ועד חובבנים."}]]}]
+10:["$","img",null,{"src":"/_next/static/media/raz.3ldj_9p_a74l8.png","alt":"רז הימן","className":"raz-image","width":467,"height":411}]
+11:["$","section",null,{"className":"abroad-services","children":[["$","h2",null,{"children":"מה אני מציע? טיפול מקצה לקצה"}],["$","ul",null,{"className":"check-list","children":[[["$","li","הרשמה",{"children":"הרשמה"}],["$","li","שילוח הכלים מהארץ",{"children":"שילוח הכלים מהארץ"}],["$","li","טיסות",{"children":"טיסות"}],["$","li","לינה",{"children":"לינה"}],["$","li","ייעוץ מקצועי",{"children":"ייעוץ מקצועי"}],["$","li","ליווי קבוצתי או אישי לפני ובזמן המרוץ",{"children":"ליווי קבוצתי או אישי לפני ובזמן המרוץ"}]],["$","li",null,{"children":"ועוד..."}]]}]]}]
+12:["$","img",null,{"src":"/_next/static/media/abroadimg.2obabjowrotxz.png","alt":"קבוצת רוכבים בראלי בחו\"ל","className":"abroad-group","width":1280,"height":640,"loading":"lazy"}]
+13:["$","section",null,{"className":"next-rally card","children":[["$","h2",null,{"children":"הראלי הקרוב"}],["$","div",null,{"className":"quill","children":["$","div",null,{"className":"ql-container ql-bubble ql-disabled","children":[["$","div",null,{"className":"ql-editor","dangerouslySetInnerHTML":{"__html":"<p class=\"ql-align-right\">פרטים בקרוב..</p>"}}],["$","div",null,{"className":"ql-clipboard","aria-hidden":"true","children":["$","br",null,{}]}]]}]}]]}]
+14:["$","section",null,{"className":"contact-card","children":[["$","div",null,{"children":[["$","h2",null,{"children":"לפרטים נוספים"}],["$","p",null,{"children":"מוזמנים ליצור קשר בטלפון, בוואטסאפ או במייל."}]]}],["$","$L36",null,{"alignRight":true,"withIcons":true}]]}]
+15:["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/3u2-n4ml14m3j.css","precedence":"next"}]
+16:["$","link","1",{"rel":"stylesheet","href":"/_next/static/chunks/26pjix73ei6t0.css","precedence":"next"}]
+17:["$","script","script-0",{"src":"/_next/static/chunks/0apj9sk62zkhc.js","async":true}]
+18:["$","$L37",null,{"children":["$","$1e",null,{"name":"Next.MetadataOutlet","children":"$@38"}]}]
+1f:["$","link","3",{"rel":"manifest","href":"/manifest.json"}]
+20:["$","link","4",{"rel":"canonical","href":"https://www.rallytrip.com/rally-abroad/"}]
+21:["$","meta","5",{"property":"og:title","content":"Rally Trip ראלי טריפ"}]
+22:["$","meta","6",{"property":"og:description","content":"ראלי טריפ עוסקת במכירת מוצרים הקשורים לעולם הראלי רייד (ספרי דרך, סיפורי דרך, גרמין, גופרו, מדי מרחק), בהדרכות ניווט ובהוצאת קבוצות למרוצים בחול"}]
+23:["$","meta","7",{"property":"og:site_name","content":"Rally Trip"}]
+24:["$","meta","8",{"property":"og:locale","content":"he_IL"}]
+25:["$","meta","9",{"property":"og:image","content":"https://www.rallytrip.com/logo512.png"}]
+26:["$","meta","10",{"property":"og:image:width","content":"512"}]
+27:["$","meta","11",{"property":"og:image:height","content":"512"}]
+28:["$","meta","12",{"property":"og:type","content":"website"}]
+29:["$","meta","13",{"name":"twitter:card","content":"summary_large_image"}]
+2a:["$","meta","14",{"name":"twitter:title","content":"Rally Trip ראלי טריפ"}]
+2b:["$","meta","15",{"name":"twitter:description","content":"ראלי טריפ עוסקת במכירת מוצרים הקשורים לעולם הראלי רייד (ספרי דרך, סיפורי דרך, גרמין, גופרו, מדי מרחק), בהדרכות ניווט ובהוצאת קבוצות למרוצים בחול"}]
+2c:["$","meta","16",{"name":"twitter:image","content":"https://www.rallytrip.com/logo512.png"}]
+2d:["$","meta","17",{"name":"twitter:image:width","content":"512"}]
+2e:["$","meta","18",{"name":"twitter:image:height","content":"512"}]
+2f:["$","link","19",{"rel":"icon","href":"/favicon.ico"}]
+30:["$","link","20",{"rel":"apple-touch-icon","href":"/logo192.png"}]
+31:["$","$L39","21",{}]
+a:300
+38:null
+34:true
+a:C
+33:0
+c:"$undefined"
+9:"$undefined"
+32:"$undefined"
+19:"$undefined"

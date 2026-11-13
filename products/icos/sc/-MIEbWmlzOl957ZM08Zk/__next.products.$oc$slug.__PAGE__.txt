@@ -1,53 +1,69 @@
 1:"$Sreact.fragment"
-2:"/_next/static/chunks/0jd54b7daf8tw.js"
+2:"/_next/static/chunks/0bi7zo8_ed5d8.js"
 3:I[87487,["$2"],"default"]
 4:I[39756,["$2"],"default"]
-5:"/_next/static/chunks/3rg6h34m87i8w.js"
+5:"/_next/static/chunks/3nj2dj-xh-27e.js"
 6:I[60542,["$2","$5"],"default"]
 7:I[37457,["$2"],"default"]
-17:"ViewportBoundary"
-18:I[97367,["$2"],"$17"]
-19:"MetadataBoundary"
-1a:I[97367,["$2"],"$19"]
-1b:"$Sreact.suspense"
-:HL["/_next/static/chunks/1b77tr28s46yi.css","style"]
-:HL["/_next/static/chunks/44yjgybm14mg3.css","style"]
-:HL["/_next/static/chunks/3522h_cxk2j2x.css","style"]
+8:"/_next/static/chunks/2t94__bzk95-3.js"
+9:I[22016,["$2","$8"],""]
+1b:"ViewportBoundary"
+1c:I[97367,["$2"],"$1b"]
+1d:"MetadataBoundary"
+1e:I[97367,["$2"],"$1d"]
+1f:"$Sreact.suspense"
+:HL["/_next/static/chunks/2_94dctupaj1x.css","style"]
+:HL["/_next/static/chunks/1du0q8whzh4wa.css","style"]
+:HL["/_next/static/chunks/0tkrpf4-tvpro.css","style"]
 :HL["/_next/static/media/WhatsApp.1cesidbvqioxt.png","image"]
 :HL["/_next/static/media/Facebook.1lxo7_o8ca2bk.png","image"]
 :HL["/_next/static/media/Mail.1h1d172pjc8rw.png","image"]
-9:X
-c:X
-c:C
-10:T4b3,[{"@context":"https://schema.org","@type":"Product","name":"מיגון לאנטנת GPS","image":["https://firebasestorage.googleapis.com/v0/b/rally-trip.appspot.com/o/products%2F-MIEbWmlzOl957ZM08Zk%2Fimage.png?alt=media&token=466dc369-31d3-4292-b2a5-f2fe4102084f"],"url":"https://www.rallytrip.com/products/icos/sc/-MIEbWmlzOl957ZM08Zk/","sku":"-MIEbWmlzOl957ZM08Zk","brand":{"@type":"Brand","name":"Rally Trip"},"category":"מדי מרחק","offers":{"@type":"Offer","url":"https://www.rallytrip.com/products/icos/sc/-MIEbWmlzOl957ZM08Zk/","priceCurrency":"ILS","price":40,"availability":"https://schema.org/InStock","seller":{"@type":"Organization","name":"Rally Trip"}}},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"בית","item":"https://www.rallytrip.com/"},{"@type":"ListItem","position":2,"name":"כל המוצרים","item":"https://www.rallytrip.com/products/"},{"@type":"ListItem","position":3,"name":"מדי מרחק","item":"https://www.rallytrip.com/products/icos/"},{"@type":"ListItem","position":4,"name":"מיגון לאנטנת GPS","item":"https://www.rallytrip.com/products/icos/sc/-MIEbWmlzOl957ZM08Zk/"}]}]f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","div",null,{"className":"page-container products-page","children":[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$10"}}],"$L11"]}],["$L12","$L13","$L14"],"$L15"]}],"p":"$@16","v":null,"s":"$9"}}]]
-d:[["children",{"s":{"n":"slug","t":"oc","k":"icos/sc/-MIEbWmlzOl957ZM08Zk","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","template":["$","$L7",null,{}]}]]}],"p":"$@e","v":"$c","s":"$9"},"c":"$Qf"}]]
-a:[["children",{"s":"products","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","template":["$","$L7",null,{}]}]]}],"p":"$@b","v":"$c","s":"$9"},"c":"$Qd"}]]
-0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/1b77tr28s46yi.css","precedence":"next"}],["$","link","1",{"rel":"stylesheet","href":"/_next/static/chunks/44yjgybm14mg3.css","precedence":"next"}],["$","link","2",{"rel":"stylesheet","href":"/_next/static/chunks/3522h_cxk2j2x.css","precedence":"next"}],["$","script","script-0",{"src":"/_next/static/chunks/0jd54b7daf8tw.js","async":true}]],["$","html",null,{"lang":"he","dir":"rtl","children":[["$","head",null,{"children":["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){var h=location.hash;if(h&&h.indexOf('#/')===0){var p=h.slice(1).replace(/\\/+$/,'');location.replace(p+'/');}})();"}}]}],["$","body",null,{"children":[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"Rally Trip\",\"alternateName\":\"ראלי טריפ\",\"url\":\"https://www.rallytrip.com\",\"logo\":\"https://www.rallytrip.com/logo512.png\",\"telephone\":\"+972505562519\",\"email\":\"119raz@walla.com\",\"sameAs\":[\"https://www.facebook.com/RallyTrip\"]}"}}],["$","main",null,{"className":"main","children":[["$","$L3",null,{}],["$","$L4",null,{"parallelRouterKey":"children","error":"$6","errorStyles":[],"errorScripts":[["$","script","script-0",{"src":"/_next/static/chunks/3rg6h34m87i8w.js","async":true}]],"template":["$","$L7",null,{}],"notFound":[["$","div",null,{"className":"page-container","children":"הדף לא נמצא"}],[]]}],["$","section",null,{"className":"footer","children":[["$","div",null,{"className":"icons-container","children":[["$","div",null,{"children":"רז הימן"}],["$","div",null,{"children":[["$","a",null,{"href":"https://wa.me/972505562519","children":["$","img",null,{"src":"/_next/static/media/WhatsApp.1cesidbvqioxt.png","alt":"WhatsApp","className":"icon"}]}],["$","a",null,{"href":"https://www.facebook.com/RallyTrip","children":["$","img",null,{"src":"/_next/static/media/Facebook.1lxo7_o8ca2bk.png","alt":"Facebook","className":"icon"}]}],["$","a",null,{"href":"mailto:119raz@walla.com","children":["$","img",null,{"src":"/_next/static/media/Mail.1h1d172pjc8rw.png","alt":"Mail","className":"icon"}]}]]}],["$","div",null,{"children":"© כל הזכויות שמורות לRally Trip"}]]}],["$","div",null,{"className":"credit","children":["$","a",null,{"href":"https://www.linkedin.com/in/oz-heymann-2193901a6/","children":"Developed by Oz Heymann"}]}]]}]]}]]}]]}]]}],"p":"$@8","v":null,"s":"$9"},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L18",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#000000"}]]}],["$","$L1a",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1b",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"מיגון לאנטנת GPS | Rally Trip"}],["$","meta","1",{"name":"description","content":"בראלי טריפ ניתן לרכוש מגווון מוצרים הקשורים לעולם הראלי רייד ולשטח בכלל. ספרי דרך, מכשירי גרמין, דיבוריות, מצלמות גופרו ועוד"}],["$","meta","2",{"name":"application-name","content":"Rally Trip"}],["$","link","3",{"rel":"manifest","href":"/manifest.json"}],["$","link","4",{"rel":"canonical","href":"https://www.rallytrip.com/products/icos/sc/-MIEbWmlzOl957ZM08Zk/"}],["$","meta","5",{"property":"og:title","content":"מיגון לאנטנת GPS"}],["$","meta","6",{"property":"og:description","content":"בראלי טריפ ניתן לרכוש מגווון מוצרים הקשורים לעולם הראלי רייד ולשטח בכלל. ספרי דרך, מכשירי גרמין, דיבוריות, מצלמות גופרו ועוד"}],["$","meta","7",{"property":"og:url","content":"https://www.rallytrip.com/products/icos/sc/-MIEbWmlzOl957ZM08Zk/"}],["$","meta","8",{"property":"og:image","content":"https://firebasestorage.googleapis.com/v0/b/rally-trip.appspot.com/o/products%2F-MIEbWmlzOl957ZM08Zk%2Fimage.png?alt=media&token=466dc369-31d3-4292-b2a5-f2fe4102084f"}],["$","meta","9",{"property":"og:image:alt","content":"מיגון לאנטנת GPS"}],["$","meta","10",{"property":"og:type","content":"website"}],["$","meta","11",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","12",{"name":"twitter:title","content":"מיגון לאנטנת GPS"}],["$","meta","13",{"name":"twitter:description","content":"בראלי טריפ ניתן לרכוש מגווון מוצרים הקשורים לעולם הראלי רייד ולשטח בכלל. ספרי דרך, מכשירי גרמין, דיבוריות, מצלמות גופרו ועוד"}],"$L1c","$L1d","$L1e","$L1f","$L20"]}]}],null]}],null]}],"p":"$@21","v":null,"s":"$9"}},"a":"$@22","u":"$@23","b":"_DRjSbRwceDCghMVFstXz"}
-24:"/_next/static/chunks/3-optrz0w-igu.js"
-25:I[22016,["$2","$24"],""]
-26:I[56469,["$2","$24"],"default"]
-27:I[97367,["$2"],"OutletBoundary"]
-29:I[27201,["$2"],"IconMark"]
+b:X
+e:X
+e:C
+12:T4b3,[{"@context":"https://schema.org","@type":"Product","name":"מיגון לאנטנת GPS","image":["https://firebasestorage.googleapis.com/v0/b/rally-trip.appspot.com/o/products%2F-MIEbWmlzOl957ZM08Zk%2Fimage.png?alt=media&token=466dc369-31d3-4292-b2a5-f2fe4102084f"],"url":"https://www.rallytrip.com/products/icos/sc/-MIEbWmlzOl957ZM08Zk/","sku":"-MIEbWmlzOl957ZM08Zk","brand":{"@type":"Brand","name":"Rally Trip"},"category":"מדי מרחק","offers":{"@type":"Offer","url":"https://www.rallytrip.com/products/icos/sc/-MIEbWmlzOl957ZM08Zk/","priceCurrency":"ILS","price":40,"availability":"https://schema.org/InStock","seller":{"@type":"Organization","name":"Rally Trip"}}},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"בית","item":"https://www.rallytrip.com/"},{"@type":"ListItem","position":2,"name":"כל המוצרים","item":"https://www.rallytrip.com/products/"},{"@type":"ListItem","position":3,"name":"מדי מרחק","item":"https://www.rallytrip.com/products/icos/"},{"@type":"ListItem","position":4,"name":"מיגון לאנטנת GPS","item":"https://www.rallytrip.com/products/icos/sc/-MIEbWmlzOl957ZM08Zk/"}]}]11:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","div",null,{"className":"page-container products-page single","children":[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$12"}}],"$L13"]}],["$L14","$L15","$L16","$L17","$L18"],"$L19"]}],"p":"$@1a","v":null,"s":"$b"}}]]
+f:[["children",{"s":{"n":"slug","t":"oc","k":"icos/sc/-MIEbWmlzOl957ZM08Zk","s":[]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","template":["$","$L7",null,{}]}]]}],"p":"$@10","v":"$e","s":"$b"},"c":"$Q11"}]]
+c:[["children",{"s":"products","h":131168,"d":{"r":["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","template":["$","$L7",null,{}]}]]}],"p":"$@d","v":"$e","s":"$b"},"c":"$Qf"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/2_94dctupaj1x.css","precedence":"next"}],["$","link","1",{"rel":"stylesheet","href":"/_next/static/chunks/1du0q8whzh4wa.css","precedence":"next"}],["$","link","2",{"rel":"stylesheet","href":"/_next/static/chunks/0tkrpf4-tvpro.css","precedence":"next"}],["$","script","script-0",{"src":"/_next/static/chunks/0bi7zo8_ed5d8.js","async":true}]],["$","html",null,{"lang":"he","dir":"rtl","children":[["$","head",null,{"children":["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){var h=location.hash;if(h&&h.indexOf('#/')===0){var p=h.slice(1).replace(/\\/+$/,'');location.replace(p+'/');}})();"}}]}],["$","body",null,{"children":[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"Rally Trip\",\"alternateName\":\"ראלי טריפ\",\"url\":\"https://www.rallytrip.com\",\"logo\":\"https://www.rallytrip.com/logo512.png\",\"telephone\":\"+972505562519\",\"email\":\"119raz@walla.com\",\"sameAs\":[\"https://www.facebook.com/RallyTrip\"]}"}}],["$","main",null,{"className":"main","children":[["$","$L3",null,{}],["$","$L4",null,{"parallelRouterKey":"children","error":"$6","errorStyles":[],"errorScripts":[["$","script","script-0",{"src":"/_next/static/chunks/3nj2dj-xh-27e.js","async":true}]],"template":["$","$L7",null,{}],"notFound":[["$","div",null,{"className":"page-container status-page","children":[["$","div",null,{"className":"status-code","children":"404"}],["$","h1",null,{"children":"הדף לא נמצא"}],["$","p",null,{"children":"ייתכן שהקישור שגוי או שהדף הוסר."}],["$","div",null,{"className":"status-actions","children":[["$","$L9",null,{"href":"/","className":"btn btn--primary","children":"לדף הבית"}],["$","$L9",null,{"href":"/products/","className":"btn btn--light","children":"לכל המוצרים"}]]}]]}],[]]}],["$","footer",null,{"className":"footer","children":[["$","div",null,{"className":"container footer-grid","children":[["$","div",null,{"className":"footer-brand","children":[["$","img",null,{"src":"/_next/static/media/logoGlow.1bjcbc_7rjnh8.png","alt":"Rally Trip","className":"footer-logo","width":112,"height":45,"loading":"lazy"}],["$","p",null,{"children":"השער שלך לעולם הראלי רייד. ציוד ניווט, הדרכות וליווי למרוצים בחו\"ל."}]]}],["$","nav",null,{"className":"footer-links","aria-label":"ניווט תחתון","children":[["$","p",null,{"className":"footer-title","children":"ניווט"}],["$","ul",null,{"children":[["$","li",null,{"children":["$","$L9",null,{"href":"/products/","children":"מוצרים"}]}],["$","li",null,{"children":["$","$L9",null,{"href":"/nav-guide/","children":"הדרכות ניווט"}]}],["$","li",null,{"children":["$","$L9",null,{"href":"/rally-abroad/","children":"מרוצים בחו\"ל"}]}]]}]]}],["$","div",null,{"className":"footer-contact","children":[["$","p",null,{"className":"footer-title","children":"רז הימן"}],["$","ul",null,{"children":[["$","li",null,{"children":["$","a",null,{"href":"tel:+972505562519","dir":"ltr","children":"050-5562-519"}]}],["$","li",null,{"children":["$","a",null,{"href":"mailto:119raz@walla.com","children":"119raz@walla.com"}]}]]}],["$","div",null,{"className":"footer-social","children":[["$","a",null,{"href":"https://wa.me/972505562519","children":["$","img",null,{"src":"/_next/static/media/WhatsApp.1cesidbvqioxt.png","alt":"WhatsApp","className":"icon"}]}],["$","a",null,{"href":"https://www.facebook.com/RallyTrip","children":["$","img",null,{"src":"/_next/static/media/Facebook.1lxo7_o8ca2bk.png","alt":"Facebook","className":"icon"}]}],["$","a",null,{"href":"mailto:119raz@walla.com","children":["$","img",null,{"src":"/_next/static/media/Mail.1h1d172pjc8rw.png","alt":"Mail","className":"icon"}]}]]}]]}]]}],["$","div",null,{"className":"container footer-bottom","children":[["$","div",null,{"children":"© כל הזכויות שמורות ל-Rally Trip"}],["$","div",null,{"className":"credit","children":["$","a",null,{"href":"https://www.linkedin.com/in/oz-heymann-2193901a6/","children":"Developed by Oz Heymann"}]}]]}]]}]]}]]}]]}]]}],"p":"$@a","v":null,"s":"$b"},"c":"$Qc"},"h":{"r":["$","$1","h",{"children":[null,["$","$L1c",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#000000"}]]}],["$","$L1e",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1f",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"מיגון לאנטנת GPS | Rally Trip"}],["$","meta","1",{"name":"description","content":"בראלי טריפ ניתן לרכוש מגווון מוצרים הקשורים לעולם הראלי רייד ולשטח בכלל. ספרי דרך, מכשירי גרמין, דיבוריות, מצלמות גופרו ועוד"}],"$L20","$L21","$L22","$L23","$L24","$L25","$L26","$L27","$L28","$L29","$L2a","$L2b","$L2c","$L2d","$L2e","$L2f","$L30"]}]}],null]}],null]}],"p":"$@31","v":null,"s":"$b"}},"a":"$@32","u":"$@33","b":"ZKYV3kkgs27YIb5AQYfNR"}
+34:I[56469,["$2","$8"],"default"]
+35:I[97367,["$2"],"OutletBoundary"]
+37:I[27201,["$2"],"IconMark"]
 :HL["https://firebasestorage.googleapis.com/v0/b/rally-trip.appspot.com/o/products%2F-MIEbWmlzOl957ZM08Zk%2Fimage.png?alt=media&token=466dc369-31d3-4292-b2a5-f2fe4102084f","image"]
-:HL["/_next/static/chunks/0i5fbc34ftnhf.css","style"]
-:HL["/_next/static/chunks/2ln1vav8ki18k.css","style"]
-11:["$","article",null,{"style":{"width":"100%"},"children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"breadcrumbs","children":[["$","$L25",null,{"href":"/","children":"בית"}]," ›",["$","$L25",null,{"href":"/products/","children":" כל המוצרים"}]," ›",[["$","$L25",null,{"href":"/products/icos/","children":[" ","מדי מרחק"," "]}]," ›"],null,["$","span",null,{"children":[" ","מיגון לאנטנת GPS"]}]]}],["$","div",null,{"className":"product-grid","children":[["$","div",null,{"className":"img-container","children":["$","img",null,{"src":"https://firebasestorage.googleapis.com/v0/b/rally-trip.appspot.com/o/products%2F-MIEbWmlzOl957ZM08Zk%2Fimage.png?alt=media&token=466dc369-31d3-4292-b2a5-f2fe4102084f","alt":"מיגון לאנטנת GPS"}]}],["$","div",null,{"className":"product-information","children":[["$","h1",null,{"className":"product-title","children":"מיגון לאנטנת GPS"}],["$","div",null,{"className":"divider"}],["$","div",null,{"className":"price","children":"₪40"}],["$","h4",null,{"children":""}],["$","div",null,{"style":{"color":"green","paddingRight":"7px"},"children":"☑ המוצר במלאי "}],["$","h2",null,{"style":{"textAlign":"center"},"children":"לרכישה"}],["$","$L26",null,{"withIcons":true}]]}],["$","div",null,{"className":"grid-bottom","children":[" ","",["$","div",null,{"style":{"padding":"15px"},"children":["$","div",null,{"className":"quill","children":["$","div",null,{"className":"ql-container ql-bubble ql-disabled","children":[["$","div",null,{"className":"ql-editor","dangerouslySetInnerHTML":{"__html":""}}],["$","div",null,{"className":"ql-clipboard","aria-hidden":"true","children":["$","br",null,{}]}]]}]}]}]]}]]}]]}]
-12:["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/0i5fbc34ftnhf.css","precedence":"next"}]
-13:["$","link","1",{"rel":"stylesheet","href":"/_next/static/chunks/2ln1vav8ki18k.css","precedence":"next"}]
-14:["$","script","script-0",{"src":"/_next/static/chunks/3-optrz0w-igu.js","async":true}]
-15:["$","$L27",null,{"children":["$","$1b",null,{"name":"Next.MetadataOutlet","children":"$@28"}]}]
-1c:["$","meta","14",{"name":"twitter:image","content":"https://firebasestorage.googleapis.com/v0/b/rally-trip.appspot.com/o/products%2F-MIEbWmlzOl957ZM08Zk%2Fimage.png?alt=media&token=466dc369-31d3-4292-b2a5-f2fe4102084f"}]
-1d:["$","meta","15",{"name":"twitter:image:alt","content":"מיגון לאנטנת GPS"}]
-1e:["$","link","16",{"rel":"icon","href":"/favicon.ico"}]
-1f:["$","link","17",{"rel":"apple-touch-icon","href":"/logo192.png"}]
-20:["$","$L29","18",{}]
-9:300
-28:null
-23:true
-9:C
-22:0
-e:"$undefined"
-b:"$undefined"
-8:"$undefined"
-21:"$undefined"
-16:"$undefined"
+:HL["/_next/static/chunks/2e3f0-o9dbwan.css","style"]
+:HL["/_next/static/chunks/2gzwwkff62dhb.css","style"]
+:HL["/_next/static/chunks/1-rhhie_1ztrq.css","style"]
+:HL["/_next/static/chunks/3u2-n4ml14m3j.css","style"]
+13:["$","article",null,{"className":"product-page","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"breadcrumbs","children":[[["$","$1","/",{"children":[["$","$L9",null,{"href":"/","children":"בית"}],["$","span",null,{"className":"sep","aria-hidden":"true"}]]}],["$","$1","/products/",{"children":[["$","$L9",null,{"href":"/products/","children":"כל המוצרים"}],["$","span",null,{"className":"sep","aria-hidden":"true"}]]}],["$","$1","/products/icos/",{"children":[["$","$L9",null,{"href":"/products/icos/","children":"מדי מרחק"}],["$","span",null,{"className":"sep","aria-hidden":"true"}]]}]],["$","span",null,{"className":"current","aria-current":"page","children":"מיגון לאנטנת GPS"}]]}],["$","div",null,{"className":"product-grid","children":[["$","div",null,{"className":"img-container","children":["$","img",null,{"src":"https://firebasestorage.googleapis.com/v0/b/rally-trip.appspot.com/o/products%2F-MIEbWmlzOl957ZM08Zk%2Fimage.png?alt=media&token=466dc369-31d3-4292-b2a5-f2fe4102084f","alt":"מיגון לאנטנת GPS"}]}],["$","div",null,{"className":"product-information","children":[["$","h1",null,{"className":"product-title","children":"מיגון לאנטנת GPS"}],["$","div",null,{"className":"price-row","children":["$","div",null,{"className":"price","children":"₪40"}]}],["$","div",null,{"className":"stock in","children":"המוצר במלאי"}],null,["$","div",null,{"className":"buy-box","children":[["$","h2",null,{"children":"לרכישה"}],["$","$L34",null,{"withIcons":true,"alignRight":true}]]}]]}],null]}]]}]
+14:["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/2e3f0-o9dbwan.css","precedence":"next"}]
+15:["$","link","1",{"rel":"stylesheet","href":"/_next/static/chunks/2gzwwkff62dhb.css","precedence":"next"}]
+16:["$","link","2",{"rel":"stylesheet","href":"/_next/static/chunks/1-rhhie_1ztrq.css","precedence":"next"}]
+17:["$","link","3",{"rel":"stylesheet","href":"/_next/static/chunks/3u2-n4ml14m3j.css","precedence":"next"}]
+18:["$","script","script-0",{"src":"/_next/static/chunks/2t94__bzk95-3.js","async":true}]
+19:["$","$L35",null,{"children":["$","$1f",null,{"name":"Next.MetadataOutlet","children":"$@36"}]}]
+20:["$","meta","2",{"name":"application-name","content":"Rally Trip"}]
+21:["$","link","3",{"rel":"manifest","href":"/manifest.json"}]
+22:["$","link","4",{"rel":"canonical","href":"https://www.rallytrip.com/products/icos/sc/-MIEbWmlzOl957ZM08Zk/"}]
+23:["$","meta","5",{"property":"og:title","content":"מיגון לאנטנת GPS"}]
+24:["$","meta","6",{"property":"og:description","content":"בראלי טריפ ניתן לרכוש מגווון מוצרים הקשורים לעולם הראלי רייד ולשטח בכלל. ספרי דרך, מכשירי גרמין, דיבוריות, מצלמות גופרו ועוד"}]
+25:["$","meta","7",{"property":"og:url","content":"https://www.rallytrip.com/products/icos/sc/-MIEbWmlzOl957ZM08Zk/"}]
+26:["$","meta","8",{"property":"og:image","content":"https://firebasestorage.googleapis.com/v0/b/rally-trip.appspot.com/o/products%2F-MIEbWmlzOl957ZM08Zk%2Fimage.png?alt=media&token=466dc369-31d3-4292-b2a5-f2fe4102084f"}]
+27:["$","meta","9",{"property":"og:image:alt","content":"מיגון לאנטנת GPS"}]
+28:["$","meta","10",{"property":"og:type","content":"website"}]
+29:["$","meta","11",{"name":"twitter:card","content":"summary_large_image"}]
+2a:["$","meta","12",{"name":"twitter:title","content":"מיגון לאנטנת GPS"}]
+2b:["$","meta","13",{"name":"twitter:description","content":"בראלי טריפ ניתן לרכוש מגווון מוצרים הקשורים לעולם הראלי רייד ולשטח בכלל. ספרי דרך, מכשירי גרמין, דיבוריות, מצלמות גופרו ועוד"}]
+2c:["$","meta","14",{"name":"twitter:image","content":"https://firebasestorage.googleapis.com/v0/b/rally-trip.appspot.com/o/products%2F-MIEbWmlzOl957ZM08Zk%2Fimage.png?alt=media&token=466dc369-31d3-4292-b2a5-f2fe4102084f"}]
+2d:["$","meta","15",{"name":"twitter:image:alt","content":"מיגון לאנטנת GPS"}]
+2e:["$","link","16",{"rel":"icon","href":"/favicon.ico"}]
+2f:["$","link","17",{"rel":"apple-touch-icon","href":"/logo192.png"}]
+30:["$","$L37","18",{}]
+b:300
+36:null
+33:true
+b:C
+32:0
+10:"$undefined"
+d:"$undefined"
+a:"$undefined"
+31:"$undefined"
+1a:"$undefined"
