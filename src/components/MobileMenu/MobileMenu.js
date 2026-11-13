@@ -25,7 +25,7 @@ const MobileMenu = () => {
                 <select value={pathname} onChange={(e) => goToPath(e.target.value)} aria-label='בחר תת קטגוריה'>
                     <option value={`/products/${category}`} disabled hidden>בחר תת קטגוריה</option>
                     {subOptions.map(subLink => <option key={subLink.path} value={subLink.path}>{subLink.name}</option>)}
-                </select> : <div></div>}
+                </select> : null}
         </section>
     );
 }

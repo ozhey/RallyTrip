@@ -92,3 +92,33 @@ export function listingSlugs() {
   }
   return slugs;
 }
+
+/**
+ * Products for the homepage "featured" strip: visible products with an image,
+ * discounted ones first, then by priority (high first).
+ * @returns {Array<[string, object]>} [id, product] pairs
+ */
+export function featuredProducts(products, limit = 8) {
+  const visible = filterAndSortProducts(products).filter(([, p]) => p.image);
+  const onSale = visible.filter(([, p]) => previewPrice(p).kind === 'discount');
+  const rest = visible.filter(([, p]) => previewPrice(p).kind !== 'discount');
+  return [...onSale, ...rest].slice(0, limit);
+}
+
+/**
+ * Cover image and product count per category, for the homepage category tiles.
+ * The cover is the image of the category's highest-priority visible product.
+ * @returns {Record<string, {image: string|null, count: number}>} keyed by category slug
+ */
+export function categoryCovers(products) {
+  const covers = {};
+  for (const link of links) {
+    const slug = lastSegment(link.path);
+    const items = filterAndSortProducts(products, { category: slug });
+    covers[slug] = {
+      image: items.find(([, p]) => p.image)?.[1].image ?? null,
+      count: items.length,
+    };
+  }
+  return covers;
+}

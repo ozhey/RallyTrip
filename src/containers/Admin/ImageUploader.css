@@ -9,9 +9,9 @@
     z-index: -1;
 }
 
-.inputfile:focus+label {
-    outline: 1px solid rgb(66, 145, 209);
-
+.inputfile:focus-visible+label {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
 }
 
 .img-preview {
@@ -25,7 +25,10 @@
     position: relative;
     width: 250px;
     height: 168px;
-    background-color: #f5f6f7;
+    background-color: var(--surface);
+    border: 1px dashed rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
     z-index: -100;
     margin: 5px 0px;
 }

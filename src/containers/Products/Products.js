@@ -8,20 +8,25 @@ const Products = ({ items, heading }) => {
     return (
         <div className='page-container products-page'>
             <SideMenu />
-            <MobileMenu />
-            <div className='products-container'>
-                <h1 className='visually-hidden'>{heading}</h1>
-                {items.length
-                    ? items.map(([id, product]) => <ProductPreview key={id} product={product} id={id} />)
-                    : 'לא נמצאו מוצרים.'}
+            <div className='products-main'>
+                <MobileMenu />
+                <div className='products-header'>
+                    <h1>{heading}</h1>
+                    {items.length ? <span className='count'>{`${items.length} מוצרים`}</span> : null}
+                </div>
+                <div className='products-container'>
+                    {items.length
+                        ? items.map(([id, product]) => <ProductPreview key={id} product={product} id={id} />)
+                        : <p className='products-empty'>לא נמצאו מוצרים.</p>}
+                </div>
             </div>
         </div>
     );
 }
 
-/** Wrapper used for a single product page (same container as the old SPA). */
+/** Wrapper used for a single product page. */
 export const ProductContainer = ({ children }) => (
-    <div className='page-container products-page'>{children}</div>
+    <div className='page-container products-page single'>{children}</div>
 );
 
 export default Products;

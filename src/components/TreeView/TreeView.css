@@ -1,20 +1,34 @@
-.show-tree {
-    max-height: 336px; /* 42 x number of child elements (categories) */
-    height: 336px;
-    transition: 0.5s ease-out;
+.tree-toggle {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    text-align: start;
 }
 
-.hide-tree {
-    max-height: 0px;
-    transition: 0.5s ease-in;
+.tree-chevron {
+    width: 18px;
+    height: 18px;
+    margin-inline-start: auto;
+    color: var(--muted);
+    transition: transform 0.25s var(--ease);
 }
 
-.rotate-down {
+.tree-toggle[aria-expanded='true'] .tree-chevron {
     transform: rotate(-90deg);
-    transition: 0.1s;
 }
 
-.rotate-up {
-    transform: rotate(90deg);
-    transition: 0.1s;
+/* Height animates to fit any number of categories */
+.tree-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s var(--ease);
+}
+
+.tree-panel.open {
+    grid-template-rows: 1fr;
+}
+
+.tree-panel > ul {
+    overflow: hidden;
+    min-height: 0;
 }

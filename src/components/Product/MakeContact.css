@@ -2,26 +2,22 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-weight: 600;
+    gap: 14px;
 }
 
 .phone.align-right {
-    align-items: start;
+    align-items: flex-start;
 }
 
-.phone-button {
+.phone-grid {
     display: flex;
-    align-items: center;
-    cursor: pointer;
-    background-color: rgb(255, 219, 102);
-    border-radius: 15px;
-    padding: 7px 25px;
-    box-sizing: border-box;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .phone-button img {
-    width: 20px;
-    padding: 0px 5px;
+    width: 18px;
+    height: 18px;
 }
 
 .phone-button.mobile {
@@ -29,17 +25,29 @@
 }
 
 .icons {
-    text-align: center;
-    padding: 10px;
+    display: flex;
+    gap: 10px;
 }
 
 .icons a {
-    padding: 0px 10px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid var(--border);
+    transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.icons a:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 .icons img {
-    width: 50px;
-    height: auto;
+    width: 26px;
+    height: 26px;
 }
 
 @media only screen and (max-width: 767px) {
@@ -47,6 +55,6 @@
         display: none;
     }
     .phone-button.mobile {
-        display: flex;
+        display: inline-flex;
     }
 }

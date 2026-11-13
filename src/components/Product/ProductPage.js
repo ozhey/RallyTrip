@@ -8,44 +8,45 @@ import './Product.css';
 const PriceTag = ({ product }) => {
     const info = pagePrice(product);
     if (info.kind === 'discount') {
-        return <>
-            <div className='price'>{info.discount}</div>
-            <div style={{ textDecoration: 'line-through', paddingRight: '7px' }}>{`₪${info.price}`}</div>
-        </>;
+        return (
+            <div className='price-row sale'>
+                <div className='price'>{info.discount}</div>
+                <div className='old-price'>{`₪${info.price}`}</div>
+            </div>
+        );
     }
-    if (info.kind === 'price') return <div className='price'>{`₪${info.price}`}</div>;
-    return <div className='price'>צור קשר לקבלת מחיר</div>;
+    if (info.kind === 'price') return <div className='price-row'><div className='price'>{`₪${info.price}`}</div></div>;
+    return <div className='price-row contact'><div className='price'>צור קשר לקבלת מחיר</div></div>;
 }
 
 const ProductPage = ({ product, details, category, subcategory }) => {
     const { title = '', description = '', image = '' } = product;
 
     return (
-        <article style={{ width: '100%' }}>
+        <article className='product-page'>
             <Breadcrumbs category={category} subcategory={subcategory} title={title} />
             <div className='product-grid'>
                 <div className='img-container'>
-                    {image ? <img src={image} alt={title} /> : ''}
+                    {image ? <img src={image} alt={title} /> : null}
                 </div>
                 <div className='product-information'>
                     <h1 className='product-title'>{title}</h1>
-                    <div className='divider'></div>
                     <PriceTag product={product} />
-                    <h4>{description}</h4>
                     {isInStock(product) ?
-                        <div style={{ color: 'green', paddingRight: '7px' }}>&#9745; המוצר במלאי </div> :
-                        <div style={{ color: 'red', paddingRight: '7px' }}>&#9746; המוצר לא קיים במלאי. צור קשר לבירור זמן אספקה. </div>}
-                    <h2 style={{ textAlign: 'center' }}>לרכישה</h2>
-                    <MakeContact withIcons />
-                </div>
-                <div className='grid-bottom'>
-                    {/* The old markup had a stray space here that adds one line of spacing; kept for visual parity. */}
-                    {' '}
-                    {hasRichText(details) ? <h3 style={{ padding: '12px 15px 0px' }}>פרטים נוספים</h3> : ''}
-                    <div style={{ padding: '15px' }}>
-                        <RichText html={details} />
+                        <div className='stock in'>המוצר במלאי</div> :
+                        <div className='stock out'>המוצר לא קיים במלאי. צור קשר לבירור זמן אספקה.</div>}
+                    {description ? <p className='product-description'>{description}</p> : null}
+                    <div className='buy-box'>
+                        <h2>לרכישה</h2>
+                        <MakeContact withIcons alignRight />
                     </div>
                 </div>
+                {hasRichText(details) ? (
+                    <section className='product-details'>
+                        <h2>פרטים נוספים</h2>
+                        <RichText html={details} />
+                    </section>
+                ) : null}
             </div>
         </article>
     );

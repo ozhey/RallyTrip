@@ -9,6 +9,12 @@ test('home page', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1, name: 'ראלי טריפ' })).toBeVisible();
   await expect(page).toHaveTitle('Rally Trip ראלי טריפ');
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+  // Category tiles link to listings; featured strip shows discounted products first, hidden ones never.
+  await expect(page.locator('.category-tile')).toHaveCount(9);
+  await expect(page.locator('.category-tile').filter({ hasText: 'גרמין' })).toHaveAttribute('href', '/products/garmin/');
+  const featured = page.locator('.featured-grid .preview-title');
+  await expect(featured.first()).toHaveText('סיפור דרך במבצע');
+  await expect(page.locator('.featured-grid').getByText('מוצר מוסתר')).toHaveCount(0);
 });
 
 // Ties keep database key order (same as the old site).

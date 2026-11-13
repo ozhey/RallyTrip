@@ -11,8 +11,11 @@ const SideMenu = () => {
 
     return (
         <nav className='sidemenu-container'>
-            <h3>סינון</h3>
+            <h2>קטגוריות</h2>
             <ul className='sidemenu-list'>
+                <li>
+                    <NavLink exact href='/products' activeClassName='active'>כל המוצרים</NavLink>
+                </li>
                 {links.map(link => (
                     <Fragment key={link.path}>
                         <li>

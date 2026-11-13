@@ -5,29 +5,25 @@ import './Product.css';
 
 const PriceTag = ({ product }) => {
     const info = previewPrice(product);
-    if (info.kind === 'discount') {
-        return <div style={{ color: 'red', fontWeight: 'bold', fontSize: '17px', marginBottom: '10px' }}>{info.discount}</div>;
-    }
-    if (info.kind === 'price') {
-        return <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>{`₪${info.price}`}</div>;
-    }
-    return <div style={{ marginBottom: '10px' }}>צור קשר לקבלת מחיר</div>;
+    if (info.kind === 'discount') return <div className='preview-price sale'>{info.discount}</div>;
+    if (info.kind === 'price') return <div className='preview-price'>{`₪${info.price}`}</div>;
+    return <div className='preview-price contact'>צור קשר לקבלת מחיר</div>;
 }
 
 const ProductPreview = ({ product, id }) => {
     const { image, title } = product;
+    const onSale = previewPrice(product).kind === 'discount';
     return (
-        <Link href={withSlash(productPath(id, product))}>
+        <Link href={withSlash(productPath(id, product))} className='preview-link'>
             <article className='preview-container'>
                 <div className='preview-top'>
-                    <img className='preview-img' src={image} alt={title} loading='lazy' />
+                    {onSale ? <span className='sale-badge'>מבצע</span> : null}
+                    {image ? <img className='preview-img' src={image} alt={title} loading='lazy' /> : null}
                 </div>
                 <div className='preview-bot'>
-                    <div style={{ fontWeight: 'bold', textAlign: 'center' }}>{title}</div>
-                    <div className='divider'></div>
+                    <div className='preview-title'>{title}</div>
                     <PriceTag product={product} />
-                    {/* Kept as <button> for visual parity; becomes a styled span in the visual refresh. */}
-                    <button type='button' className='btn' tabIndex={-1}>לפרטים נוספים</button>
+                    <span className='card-cta'>לפרטים נוספים</span>
                 </div>
             </article>
         </Link>

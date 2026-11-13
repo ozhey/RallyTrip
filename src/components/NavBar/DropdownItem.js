@@ -8,16 +8,22 @@ const DropdownItem = ({ path, label, routes }) => {
     const [viewSubMenu, setViewSubMenu] = useState(false);
 
     return (
-        <li onMouseEnter={() => setViewSubMenu(true)} onMouseLeave={() => setViewSubMenu(false)}>
+        <li
+            className={routes.length ? 'has-sub' : undefined}
+            onMouseEnter={() => setViewSubMenu(true)}
+            onMouseLeave={() => setViewSubMenu(false)}
+        >
             <NavLink href={path} activeClassName='active'>{label}</NavLink>
-            <ul className='submenu'>
-                {viewSubMenu ? routes.map(link =>
-                    <li key={link.path}>
-                        <NavLink href={link.path} activeClassName='active'>
-                            {link.name}
-                        </NavLink>
-                    </li>) : ''}
-            </ul>
+            {viewSubMenu && routes.length ? (
+                <ul className='submenu'>
+                    {routes.map(link =>
+                        <li key={link.path}>
+                            <NavLink href={link.path} activeClassName='active'>
+                                {link.name}
+                            </NavLink>
+                        </li>)}
+                </ul>
+            ) : null}
         </li>
     );
 }

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import arrow from '../../icons/arrow.png';
 import './TreeView.css';
 
 const TreeView = ({ label, children, labelClass }) => {
@@ -9,14 +8,19 @@ const TreeView = ({ label, children, labelClass }) => {
 
     return (
         <>
-            <div className={labelClass} style={{ display: 'flex' }} onClick={() => setViewItems(prevState => !prevState)}>
+            <button
+                type='button'
+                className={['tree-toggle', labelClass].filter(Boolean).join(' ')}
+                aria-expanded={viewItems}
+                onClick={() => setViewItems(prevState => !prevState)}
+            >
                 {label}
-                <img src={arrow.src} alt='' style={{ height: '20px', marginRight: 'auto' }} className={viewItems ? 'rotate-up' : 'rotate-down'} />
-            </div>
-            <div className={viewItems ? 'show-tree' : 'hide-tree'}>
-                <ul style={{ overflow: 'hidden' }} className={viewItems ? 'show-tree' : 'hide-tree'}>
-                    {children}
-                </ul>
+                <svg className='tree-chevron' viewBox='0 0 24 24' aria-hidden='true'>
+                    <path d='M15 6l-6 6 6 6' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' />
+                </svg>
+            </button>
+            <div className={viewItems ? 'tree-panel open' : 'tree-panel'}>
+                <ul>{children}</ul>
             </div>
         </>
     );

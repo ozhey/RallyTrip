@@ -42,8 +42,8 @@ const NavBar = () => {
                         {showDropdown ? <Dropdown /> : null}
                     </li>
                 </ul>
-                <Link href='/'>
-                    <img src={logo.src} alt='Rally Trip' className='logo' />
+                <Link href='/' className='logo-link'>
+                    <img src={logo.src} alt='Rally Trip' className='logo' width={132} height={53} />
                 </Link>
                 <ul className='nav-links'>
                     <li><NavLink href="/rally-abroad" activeClassName="nav-active">מרוצים בחו&quot;ל</NavLink></li>

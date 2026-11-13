@@ -1,17 +1,26 @@
+import { Fragment } from 'react';
 import Link from 'next/link';
 import { resolveCategoryNames } from '@/lib/products';
 import './Product.css';
 
 const Breadcrumbs = ({ category, subcategory, title }) => {
     const { categoryName, subcategoryName } = resolveCategoryNames(category, subcategory);
+    const crumbs = [
+        { href: '/', label: 'בית' },
+        { href: '/products/', label: 'כל המוצרים' },
+        categoryName && { href: `/products/${category}/`, label: categoryName },
+        subcategoryName && { href: `/products/${category}/${subcategory}/`, label: subcategoryName },
+    ].filter(Boolean);
 
     return (
         <nav className='breadcrumbs' aria-label='breadcrumbs'>
-            <Link href='/'>בית</Link> &#x203A;
-            <Link href='/products/'> כל המוצרים</Link> &#x203A;
-            {categoryName ? <><Link href={`/products/${category}/`}> {categoryName} </Link> &#x203A;</> : null}
-            {subcategoryName ? <><Link href={`/products/${category}/${subcategory}/`}> {subcategoryName} </Link> &#x203A;</> : null}
-            <span> {title}</span>
+            {crumbs.map(crumb => (
+                <Fragment key={crumb.href}>
+                    <Link href={crumb.href}>{crumb.label}</Link>
+                    <span className='sep' aria-hidden='true' />
+                </Fragment>
+            ))}
+            <span className='current' aria-current='page'>{title}</span>
         </nav>
     );
 }

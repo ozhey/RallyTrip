@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
+  categoryCovers,
   effectivePrice,
+  featuredProducts,
   filterAndSortProducts,
   findCategory,
   isInStock,
@@ -88,5 +90,39 @@ describe('categories', () => {
   it('builds product paths, defaulting the subcategory to "sc"', () => {
     expect(productPath('x', { category: 'garmin', subcategory: 'watches' })).toBe('/products/garmin/watches/x');
     expect(productPath('y', { category: 'roadbooks' })).toBe('/products/roadbooks/sc/y');
+  });
+});
+
+describe('featuredProducts', () => {
+  const shop = {
+    a: { category: 'garmin', title: 'A', priority: '1', image: 'a.png' },
+    b: { category: 'garmin', title: 'B', priority: '5', image: 'b.png' },
+    c: { category: 'roadbooks', title: 'C', priority: '0', discount: '₪10', image: 'c.png' },
+    d: { category: 'garmin', title: 'D', priority: '9', image: 'd.png', hide: true },
+    e: { category: 'garmin', title: 'E', priority: '7' },
+  };
+  const ids = (n) => featuredProducts(shop, n).map(([id]) => id);
+
+  it('puts discounted products first, then by priority, skipping hidden and image-less ones', () => {
+    expect(ids()).toEqual(['c', 'b', 'a']);
+  });
+  it('respects the limit', () => {
+    expect(ids(2)).toEqual(['c', 'b']);
+  });
+  it('handles missing data', () => {
+    expect(featuredProducts(undefined)).toEqual([]);
+  });
+});
+
+describe('categoryCovers', () => {
+  it('uses the top-priority visible product image and counts products per category', () => {
+    const covers = categoryCovers({
+      a: { category: 'garmin', subcategory: 'watches', priority: '1', image: 'a.png' },
+      b: { category: 'garmin', subcategory: 'watches', priority: '5' },
+      c: { category: 'garmin', subcategory: 'watches', priority: '3', image: 'c.png' },
+      d: { category: 'garmin', subcategory: 'watches', priority: '9', image: 'd.png', hide: true },
+    });
+    expect(covers.garmin).toEqual({ image: 'c.png', count: 3 });
+    expect(covers.roadbooks).toEqual({ image: null, count: 0 });
   });
 });
