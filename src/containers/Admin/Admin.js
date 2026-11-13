@@ -62,13 +62,19 @@ const Admin = () => {
             <article className='page-container'>
                 <h2>עמוד מנהל</h2>
                 <button className='button' onClick={signOut}>התנתק</button>
-                <form className="form--compressed">
-                    <input id="action-add" type="radio" value="add product" {...register2('action')} />
-                    <label htmlFor="action-add">מוצר חדש</label>
-                    <input id="action-update" type="radio" value="update product" {...register2('action')} />
-                    <label htmlFor="action-update">עריכת מוצר</label>
-                    <input id="action-abroad" type="radio" value="set rally abroad" {...register2('action')} />
-                    <label htmlFor="action-abroad">עריכת תוכן ראליים בחו&quot;ל</label>
+                <form className="form--compressed admin-menu">
+                    <label className="segment">
+                        <input type="radio" value="add product" {...register2('action')} />
+                        מוצר חדש
+                    </label>
+                    <label className="segment">
+                        <input type="radio" value="update product" {...register2('action')} />
+                        עריכת מוצר
+                    </label>
+                    <label className="segment">
+                        <input type="radio" value="set rally abroad" {...register2('action')} />
+                        עריכת תוכן ראליים בחו&quot;ל
+                    </label>
                 </form>
                 {actionComponent}
             </article>

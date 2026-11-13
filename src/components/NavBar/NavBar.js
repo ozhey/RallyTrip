@@ -14,7 +14,9 @@ const NavBar = () => {
     const pathname = usePathname();
     // The drawer is open only for the path it was opened on, so navigating closes it.
     const [drawerOpenedOn, setDrawerOpenedOn] = useState(null);
-    const [showDropdown, setShowDropdown] = useState(false);
+    // Same for the products dropdown: picking a category closes it even though the mouse is still over it.
+    const [dropdownOpenedOn, setDropdownOpenedOn] = useState(null);
+    const showDropdown = dropdownOpenedOn === pathname;
     const sideDrawerOpen = drawerOpenedOn === pathname;
     const closeDrawer = () => setDrawerOpenedOn(null);
 
@@ -35,7 +37,7 @@ const NavBar = () => {
                 </button>
                 <ul className='nav-links'>
                     <li><NavLink exact href="/" activeClassName="nav-active">בית</NavLink></li>
-                    <li onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)}>
+                    <li onMouseEnter={() => setDropdownOpenedOn(pathname)} onMouseLeave={() => setDropdownOpenedOn(null)}>
                         <NavLink href="/products" activeClassName="nav-active">
                             מוצרים
                         </NavLink>

@@ -40,14 +40,11 @@
     flex-basis: 100%;
 }
 
-/* Admin menu radios as segmented buttons */
-.form--compressed input[type=radio] {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-}
-
-.form--compressed input[type=radio] + label {
+/* Admin menu: radio + text inside one pill (radio stays visible and clickable) */
+.admin-menu .segment {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     padding: 8px 16px;
     border-radius: var(--radius-pill);
     background: var(--surface);
@@ -57,19 +54,23 @@
     transition: background-color 0.15s;
 }
 
-.form--compressed input[type=radio] + label:hover {
+.admin-menu .segment:hover {
     background: var(--surface-2);
 }
 
-.form--compressed input[type=radio]:checked + label {
+.admin-menu .segment input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    padding: 0;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.admin-menu .segment:has(input:checked) {
     background: var(--ink);
     color: #fff;
     border-color: var(--ink);
-}
-
-.form--compressed input[type=radio]:focus-visible + label {
-    outline: 3px solid var(--accent);
-    outline-offset: 2px;
 }
 
 /*========== Style input elements ==========*/
