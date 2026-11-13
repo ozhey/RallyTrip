@@ -1,347 +1,89 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
-import ReactQuill from 'react-quill-new';
-import { get, onValue, push, ref, update } from 'firebase/database';
-import { deleteObject, getDownloadURL, ref as storageRef, uploadBytesResumable } from 'firebase/storage';
+import { useEffect, useRef, useState } from 'react';
+import { onValue, ref, update } from 'firebase/database';
+import { deleteObject, ref as storageRef } from 'firebase/storage';
 import { getFirebase } from '@/lib/firebase/client';
-import { categoryOptions, pagePrice, subcategoryOptions, toNumber } from '@/lib/products';
-import { normalizeQuillSpaces } from '@/lib/quillHtml';
-import ImageUploader from './ImageUploader';
 import Loader from '../../components/Loader/Loader';
 import Dialog from '../../components/Dialog/Dialog';
-import { modules, formats, EMPTY_EDITOR_VALUE } from './quillConfig';
+import ProductList from './ProductList';
+import ProductForm, { errorContent } from './ProductForm';
 import { PUBLISH_NOTE, refreshPublicPages } from './refresh';
-import 'react-quill-new/dist/quill.snow.css';
 import './Admin.css';
 
-const CATEGORY_OPTIONS = categoryOptions().map(({ value, label }) => <option key={value} value={value}>{label}</option>);
-const EMPTY_PRODUCT = { title: '', description: '', price: '', stock: '', category: categoryOptions()[0]?.value ?? '', subcategory: '', priority: '', hide: false, discount: '', image: undefined };
-const UNSAVED_WARNING = 'יש שינויים שלא נשמרו. להמשיך בלי לשמור?';
-
-// Uploads a product image and resolves to its download URL.
-async function uploadProductImage(storage, productId, file) {
-    const task = uploadBytesResumable(storageRef(storage, `products/${productId}/image.png`), file);
-    task.on('state_changed', (snapshot) => {
-        console.log('Upload is ' + Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100) + '% done');
-    });
-    await task;
-    return getDownloadURL(task.snapshot.ref);
-}
-
-// Sale price must be a positive number below the regular price (or empty for no sale).
-function validateDiscount(value, { price }) {
-    if (value === '' || value == null) return true;
-    if (!(toNumber(price) > 0)) return 'מחיר מבצע אפשרי רק כשיש מחיר רגיל';
-    const sale = toNumber(value);
-    if (!(sale > 0)) return 'יש להכניס מספר בלבד, למשל 150';
-    if (sale >= toNumber(price)) return 'מחיר המבצע חייב להיות נמוך מהמחיר הרגיל';
-    return true;
-}
-
-const errorContent = (title, error) => (
-    <>
-        {title}
-        <div className='dialog-detail'>{String(error)}</div>
-    </>
-);
-
-// How the price will look on the site, using the same rules as the product cards/page.
-const PricePreview = ({ price, discount }) => {
-    const info = pagePrice({ price, discount });
-    return (
-        <div className='price-preview' aria-live='polite'>
-            <span className='hint'>כך יופיע באתר:</span>
-            {info.kind === 'discount' ? <>
-                <span className='pp-price sale'>{`₪${info.sale}`}</span>
-                <span className='pp-old'>{`₪${info.price}`}</span>
-                <span className='pp-badge'>{`${info.percentOff}% הנחה`}</span>
-            </> : info.kind === 'price' ?
-                <span className='pp-price'>{`₪${info.price}`}</span> :
-                <span className='pp-price contact'>צור קשר לקבלת מחיר</span>}
-        </div>
-    );
-};
-
-const ProductManager = ({ action, onDirtyChange }) => {
+/**
+ * Products section: the product list, or the editor for one product.
+ * productParam (from the URL): null → list, 'new' → new-product form, otherwise a product id.
+ */
+const ProductManager = ({ productParam, navigate, onDirtyChange }) => {
     const { db, auth, storage } = getFirebase();
-
-    // The edited product form. shouldUnregister drops fields that disappear (e.g. subcategory
-    // after switching to a category without subcategories), like react-hook-form v6 did.
-    const { register, handleSubmit, formState: { errors, dirtyFields }, control, reset } = useForm({ shouldUnregister: true, defaultValues: EMPTY_PRODUCT });
-
-    // Quill data, tagged with the product it belongs to so a slow load can't overwrite another product.
-    // touched: the user typed in the editor (Quill also fires onChange when it normalizes loaded HTML).
-    const [editor, setEditor] = useState({ id: undefined, value: EMPTY_EDITOR_VALUE, touched: false });
-    const [productsInfo, setProductsInfo] = useState({}); // All products from firebase
-    const [productsLoaded, setProductsLoaded] = useState(false);
-    const [currentProductId, setCurrentProductId] = useState(); // The product being edited
-    const [legacyDiscount, setLegacyDiscount] = useState(''); // old free-text discount that isn't a plain number
+    const [products, setProducts] = useState({}); // All products from firebase
+    const [loaded, setLoaded] = useState(false);
+    const [filters, setFilters] = useState({ search: '', category: '', subcategory: '' }); // kept while going list ↔ editor
     const [isLoading, setIsLoading] = useState(false);
     const [dialogContent, setDialogContent] = useState(false);
+    const deletingRef = useRef(null); // product being deleted here (its disappearance is expected)
 
-    // Product picker filters
-    const [search, setSearch] = useState('');
-    const [pickCategory, setPickCategory] = useState('');
-    const [pickSubcategory, setPickSubcategory] = useState('');
+    const isNew = productParam === 'new';
+    const productId = productParam && !isNew ? productParam : undefined;
+    const product = productId ? products[productId] : undefined;
 
-    const [categorySelectedProd, uploadedImage, price, discount] = useWatch({ control, name: ['category', 'image', 'price', 'discount'] });
-    const currentProduct = currentProductId ? productsInfo[currentProductId] : undefined;
-    const isEdit = action === 'update product';
-    const isDirty = Object.keys(dirtyFields).length > 0 || editor.touched;
+    useEffect(() => onValue(ref(db, 'products'), (snapshot) => {
+        setProducts(snapshot.val() ?? {});
+        setLoaded(true);
+    }), [db]);
 
-    useEffect(() => { onDirtyChange?.(isDirty); }, [isDirty, onDirtyChange]);
-
-    // Load a product (or nothing, for a clean "new product" form) into the form and editor.
-    const selectProduct = (id) => {
-        setCurrentProductId(id);
-        setEditor({ id, value: EMPTY_EDITOR_VALUE, touched: false });
-        setLegacyDiscount('');
-        if (!id) {
-            reset(EMPTY_PRODUCT);
-            return;
+    // The open product no longer exists (bad link, or deleted elsewhere) → back to the list.
+    useEffect(() => {
+        if (loaded && productId && !product && deletingRef.current !== productId) {
+            navigate({}, { replace: true, force: true });
+            setDialogContent('המוצר לא נמצא — אולי הוא נמחק.');
         }
-        const p = productsInfo[id] ?? {};
-        const str = (v) => (v == null ? '' : String(v));
-        // Older products may hold free text in "discount"; keep only a plain number and show the old text.
-        const rawDiscount = str(p.discount).trim();
-        const discountNumber = toNumber(rawDiscount);
-        const cleanDiscount = discountNumber > 0 ? String(discountNumber) : '';
-        if (rawDiscount && rawDiscount !== cleanDiscount) setLegacyDiscount(rawDiscount);
-        reset({
-            title: str(p.title), description: str(p.description), price: str(p.price), stock: str(p.stock),
-            category: str(p.category), subcategory: str(p.subcategory), priority: str(p.priority),
-            hide: p.hide === true, discount: cleanDiscount, image: undefined,
-        });
-        get(ref(db, `quill/${id}`)).then((snapshot) => {
-            setEditor((prev) => (prev.id === id ? { id, value: snapshot.val() ?? EMPTY_EDITOR_VALUE, touched: false } : prev));
-        });
-    };
+    }, [loaded, productId, product, navigate]);
 
-    // Switch product (or close it) — asks first when there are unsaved changes.
-    const requestSelect = (id) => {
-        if (id === currentProductId) return;
-        if (isDirty && !window.confirm(UNSAVED_WARNING)) return;
-        selectProduct(id);
-    };
-
-    const onSubmit = async (data) => {
+    const deleteProduct = async (id) => {
+        const { image } = products[id] ?? {};
         setIsLoading(true);
-        const { image, ...product } = data;
-        if (!product.subcategory) product.subcategory = 'sc'; // no subcategory → 'sc' just to organize the data
-        product.hide = Boolean(product.hide);
-        product.discount = String(product.discount ?? '').trim();
-        // New product → generate a key locally (no write yet).
-        const productKey = currentProductId || push(ref(db, 'products')).key;
-        try {
-            if (image && image[0]) { // A new image overwrites the old one.
-                product.image = await uploadProductImage(storage, productKey, image[0]);
-            } else if (currentProduct?.image) { // No new image → keep the old one.
-                product.image = currentProduct.image;
-            }
-            // Write the product and its rich-text details together.
-            await update(ref(db), {
-                ['/products/' + productKey]: product,
-                ['/quill/' + productKey]: normalizeQuillSpaces(editor.value),
-            });
-            await refreshPublicPages(auth, ['products']);
-            setDialogContent('ההעלאה בוצעה בהצלחה.' + PUBLISH_NOTE);
-            if (isEdit) { // keep the product open, with the saved values as the new baseline
-                reset({ ...data, discount: product.discount, image: undefined });
-                setEditor((prev) => ({ ...prev, touched: false }));
-                setLegacyDiscount('');
-            } else {
-                selectProduct(); // clear the form for the next product
-            }
-        } catch (error) {
-            setDialogContent(errorContent('השמירה נכשלה. כדאי לבדוק את החיבור לאינטרנט ולנסות שוב.', error));
-        } finally {
-            setIsLoading(false);
-        }
-    }
-
-    const deleteProduct = async () => {
-        if (!window.confirm(`אתה עומד למחוק את המוצר "${currentProduct.title}". האם אתה בטוח?`)) return;
-        setIsLoading(true);
-        const id = currentProductId;
-        if (currentProduct?.image) {
-            deleteObject(storageRef(storage, currentProduct.image))
-                .then(() => console.log('image deleted successfully!'))
-                .catch((error) => console.log('error in deleting image:' + error));
-        }
-        selectProduct();
+        deletingRef.current = id;
         try {
             await update(ref(db), { ['/products/' + id]: null, ['/quill/' + id]: null });
+            navigate({}, { replace: true, force: true });
+            if (image) {
+                deleteObject(storageRef(storage, image))
+                    .then(() => console.log('image deleted successfully!'))
+                    .catch((error) => console.log('error in deleting image:' + error));
+            }
             await refreshPublicPages(auth, ['products']);
             setDialogContent('המוצר נמחק בהצלחה.' + PUBLISH_NOTE);
         } catch (error) {
             setDialogContent(errorContent('המחיקה נכשלה. כדאי לבדוק את החיבור לאינטרנט ולנסות שוב.', error));
         } finally {
+            deletingRef.current = null;
             setIsLoading(false);
         }
+    };
+
+    let content;
+    if (!productParam) {
+        content = <ProductList products={products} loaded={loaded} filters={filters} setFilters={setFilters}
+            onOpen={(id) => navigate({ product: id })} onNew={() => navigate({ product: 'new' })} />;
+    } else if (productId && !product) {
+        content = <Loader />; // still loading (or about to go back to the list)
+    } else {
+        content = <ProductForm key={productParam} productId={productId} product={product}
+            onBack={() => navigate({})}
+            onCreated={(id) => navigate({ product: id }, { replace: true, force: true })}
+            onDelete={deleteProduct}
+            onDirtyChange={onDirtyChange} setBusy={setIsLoading} notify={setDialogContent} />;
     }
-
-    // Product list (only needed when editing).
-    useEffect(() => {
-        if (!isEdit) return undefined;
-        return onValue(ref(db, 'products'), (snapshot) => {
-            setProductsInfo(snapshot.val() ?? {});
-            setProductsLoaded(true);
-        });
-    }, [isEdit, db]);
-
-    const query = search.trim();
-    const pickedIds = Object.keys(productsInfo)
-        .filter((id) => {
-            const p = productsInfo[id];
-            return (!pickCategory || p.category === pickCategory) &&
-                (!pickSubcategory || p.subcategory === pickSubcategory) &&
-                (!query || String(p.title ?? '').includes(query));
-        })
-        .sort((a, b) => String(productsInfo[a].title ?? '').localeCompare(String(productsInfo[b].title ?? ''), 'he'));
-
-    const pickerSubOptions = subcategoryOptions(pickCategory);
-    const formSubOptions = subcategoryOptions(categorySelectedProd);
-    const showForm = !isEdit || currentProductId;
 
     return (
         <article>
             <Dialog dialogContent={dialogContent} setDialogContent={setDialogContent} />
-            {isEdit ?
-                <section className='picker'>
-                    <h3>בחירת מוצר לעריכה</h3>
-                    <div className='picker-row'>
-                        <div className='field'>
-                            <label htmlFor='pick-search'>חיפוש לפי שם</label>
-                            <input id='pick-search' type='search' value={search} onChange={(e) => setSearch(e.target.value)} placeholder='הקלד חלק משם המוצר' />
-                        </div>
-                        <div className='field'>
-                            <label htmlFor='pick-category'>קטגוריה</label>
-                            <select id='pick-category' value={pickCategory} onChange={(e) => { setPickCategory(e.target.value); setPickSubcategory(''); }}>
-                                <option value=''>כל הקטגוריות</option>
-                                {CATEGORY_OPTIONS}
-                            </select>
-                        </div>
-                        {pickerSubOptions.length ?
-                            <div className='field'>
-                                <label htmlFor='pick-subcategory'>תת קטגוריה</label>
-                                <select id='pick-subcategory' value={pickSubcategory} onChange={(e) => setPickSubcategory(e.target.value)}>
-                                    <option value=''>הכל</option>
-                                    {pickerSubOptions.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}
-                                </select>
-                            </div> : null}
-                    </div>
-                    <div className='field'>
-                        <label htmlFor='pick-product'>מוצר {productsLoaded ? <span className='hint'>({pickedIds.length} מוצרים)</span> : null}</label>
-                        <select id='pick-product' className='pick-product' value={pickedIds.includes(currentProductId) ? currentProductId : ''} onChange={(e) => requestSelect(e.target.value || undefined)}>
-                            <option value=''>{!productsLoaded ? 'טוען מוצרים…' : pickedIds.length ? 'בחר מוצר…' : 'לא נמצאו מוצרים'}</option>
-                            {pickedIds.map((id) => <option key={id} value={id}>{productsInfo[id].title}{productsInfo[id].hide ? ' (מוסתר)' : ''}</option>)}
-                        </select>
-                    </div>
-                    {!currentProductId ? <p className='hint'>בחר מוצר מהרשימה והוא ייפתח לעריכה.</p> : null}
-                </section>
-                : null}
-            {showForm ?
-                <form onSubmit={handleSubmit(onSubmit)} className='form product-form' noValidate>
-                    <h2>{currentProductId ? `עדכון מוצר "${currentProduct?.title ?? ''}"` : 'הוספת מוצר'}</h2>
-
-                    <fieldset className='form-section'>
-                        <legend>פרטי מוצר</legend>
-                        <div className='field'>
-                            <label htmlFor='title'>כותרת</label>
-                            <input id='title' type="text" {...register('title', { required: true })} placeholder="שם המוצר" />
-                            {errors.title && <span className="error">יש להכניס כותרת</span>}
-                        </div>
-                        <div className='field'>
-                            <label htmlFor='description'>תיאור</label>
-                            <textarea id='description' {...register('description')} placeholder="תיאור קצר שיופיע ליד המחיר" />
-                        </div>
-                    </fieldset>
-
-                    <fieldset className='form-section'>
-                        <legend>מחיר ומבצע</legend>
-                        <div className='field-grid'>
-                            <div className='field'>
-                                <label htmlFor='price'>מחיר</label>
-                                <input id='price' type='number' inputMode='decimal' min='0' {...register('price', { required: true })} placeholder="למשל 200" />
-                                <span className='hint'>מחיר 0 = באתר יופיע &quot;צור קשר לקבלת מחיר&quot;</span>
-                                {errors.price && <span className="error">יש לציין מחיר (אפשר 0)</span>}
-                            </div>
-                            <div className='field'>
-                                <label htmlFor='discount'>מחיר מבצע (לא חובה)</label>
-                                <input id='discount' type='number' inputMode='decimal' min='0' {...register('discount', { validate: validateDiscount, deps: ['price'] })} placeholder="למשל 150" />
-                                <span className='hint'>השאר ריק אם אין מבצע. מספר בלבד, נמוך מהמחיר הרגיל.</span>
-                                {legacyDiscount ? <span className='hint legacy'>בעבר נכתב כאן: &quot;{legacyDiscount}&quot; — עכשיו נשמר רק מספר.</span> : null}
-                                {errors.discount && <span className="error">{errors.discount.message}</span>}
-                            </div>
-                        </div>
-                        <PricePreview price={price} discount={discount} />
-                    </fieldset>
-
-                    <fieldset className='form-section'>
-                        <legend>קטגוריה</legend>
-                        <div className='field-grid'>
-                            <div className='field'>
-                                <label htmlFor='category'>קטגוריה</label>
-                                <select id='category' {...register('category', { required: true })}>
-                                    {CATEGORY_OPTIONS}
-                                </select>
-                            </div>
-                            {formSubOptions.length ?
-                                <div className='field'>
-                                    <label htmlFor='subcategory'>תת קטגוריה</label>
-                                    <select id='subcategory' {...register('subcategory', { required: true })}>
-                                        {formSubOptions.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}
-                                    </select>
-                                    {errors.subcategory && <span className="error">יש לציין תת קטגוריה</span>}
-                                </div> : null}
-                        </div>
-                    </fieldset>
-
-                    <fieldset className='form-section'>
-                        <legend>מלאי ותצוגה</legend>
-                        <div className='field-grid'>
-                            <div className='field'>
-                                <label htmlFor='stock'>מלאי</label>
-                                <input id='stock' type='number' inputMode='numeric' min='0' {...register('stock', { required: true })} placeholder="כמה יחידות יש" />
-                                <span className='hint'>0 = באתר יופיע &quot;המוצר לא קיים במלאי&quot;</span>
-                                {errors.stock && <span className="error">יש להכניס מספר מוצרים במלאי (אפשר 0)</span>}
-                            </div>
-                            <div className='field'>
-                                <label htmlFor='priority'>עדיפות</label>
-                                <input id='priority' type='number' inputMode='numeric' {...register('priority')} placeholder="0" />
-                                <span className='hint'>מספר גבוה יותר = המוצר יוצג גבוה יותר ברשימה</span>
-                            </div>
-                        </div>
-                        <label className='checkbox-row' htmlFor='hide'>
-                            <input id='hide' type='checkbox' {...register('hide')} />
-                            <span>הסתר מוצר מהאתר <span className='hint'>(המוצר נשמר אבל לא מופיע ללקוחות)</span></span>
-                        </label>
-                    </fieldset>
-
-                    <fieldset className='form-section'>
-                        <legend>תמונה</legend>
-                        <ImageUploader product={currentProduct} uploadedImage={uploadedImage} registration={register('image')} />
-                    </fieldset>
-
-                    <fieldset className='form-section'>
-                        <legend>מידע נוסף</legend>
-                        <span className='hint'>יופיע בעמוד המוצר תחת &quot;פרטים נוספים&quot;</span>
-                        <ReactQuill theme="snow" value={editor.value} modules={modules} formats={formats}
-                            onChange={(value, _delta, source) => setEditor((prev) => ({ ...prev, value, touched: prev.touched || source === 'user' }))} />
-                    </fieldset>
-
-                    <div className='form-actions'>
-                        <input type="submit" value={isEdit ? 'שמור שינויים' : 'העלה מוצר'} className={'button green big' + (isDirty ? ' is-dirty' : '')} />
-                        {currentProductId ? <button className='button' type='button' onClick={() => requestSelect(undefined)}>סגור</button> : null}
-                        {isDirty ? <span className='hint unsaved'>יש שינויים שלא נשמרו</span> : null}
-                        {currentProductId ? <button className='button danger-outline' type='button' onClick={deleteProduct}>מחק מוצר</button> : null}
-                    </div>
-                </form> : null}
+            {content}
             {isLoading ? <Loader fullscreen /> : null}
         </article>
     );
-}
+};
 
 export default ProductManager;

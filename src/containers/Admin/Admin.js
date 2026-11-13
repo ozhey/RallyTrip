@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSearchParams } from 'next/navigation';
 import {
     browserLocalPersistence,
     inMemoryPersistence,
@@ -16,10 +17,9 @@ import ProductManager from './ProductManager';
 import AbroadEdit from './AbroadEdit';
 import './Admin.css';
 
-const ACTIONS = [
-    { value: 'update product', label: 'עריכת מוצר' },
-    { value: 'add product', label: 'מוצר חדש' },
-    { value: 'set rally abroad', label: 'עריכת תוכן ראליים בחו"ל' },
+const TABS = [
+    { value: 'products', label: 'מוצרים' },
+    { value: 'abroad', label: 'ראליים בחו"ל' },
 ];
 
 const UNSAVED_WARNING = 'יש שינויים שלא נשמרו. להמשיך בלי לשמור?';
@@ -30,8 +30,15 @@ const Admin = () => {
     const [user, setUser] = useState(null);
     const [authChecked, setAuthChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [action, setAction] = useState('update product'); // editing is the most common task
     const [isDirty, setIsDirty] = useState(false); // the open editor has unsaved changes
+    const dirtyRef = useRef(false); // same as isDirty, readable from navigate/popstate handlers
+    useEffect(() => { dirtyRef.current = isDirty; }, [isDirty]);
+
+    // The view lives in the URL so the phone's back button and reloads work:
+    // /admin/ → product list · ?product=<id|new> → product editor · ?section=abroad → rally-abroad editor.
+    const searchParams = useSearchParams();
+    const section = searchParams.get('section') === 'abroad' ? 'abroad' : 'products';
+    const productParam = section === 'products' ? searchParams.get('product') : null;
 
     const onSubmit = async ({ email, password, persistence }) => {
         setIsLoading(true);
@@ -52,12 +59,40 @@ const Admin = () => {
         firebaseSignOut(auth).catch((error) => console.log(error));
     }
 
-    const changeAction = (next) => {
-        if (next === action) return;
-        if (isDirty && !window.confirm(UNSAVED_WARNING)) return;
+    /**
+     * Go to another admin view. query: { section?, product? }.
+     * Asks first when there are unsaved changes (unless force), replace: no new history entry.
+     * Returns false when the user chose to stay.
+     */
+    const navigate = useCallback((query, { replace = false, force = false } = {}) => {
+        const params = new URLSearchParams();
+        for (const [key, value] of Object.entries(query)) if (value) params.set(key, value);
+        const url = `${window.location.pathname}${params.size ? `?${params}` : ''}`;
+        if (url === window.location.pathname + window.location.search) return true; // already there
+        if (!force && dirtyRef.current && !window.confirm(UNSAVED_WARNING)) return false;
+        dirtyRef.current = false;
         setIsDirty(false);
-        setAction(next);
-    }
+        window.history[replace ? 'replaceState' : 'pushState'](null, '', url);
+        window.scrollTo(0, 0);
+        return true;
+    }, []);
+
+    // Browser/phone back with unsaved changes: ask, and on "stay" restore the URL we were on.
+    const currentUrlRef = useRef('');
+    useEffect(() => { currentUrlRef.current = window.location.href; }, [searchParams]);
+    useEffect(() => {
+        const onPopState = () => {
+            if (!dirtyRef.current) return;
+            if (window.confirm(UNSAVED_WARNING)) {
+                dirtyRef.current = false;
+                setIsDirty(false);
+            } else {
+                window.history.pushState(null, '', currentUrlRef.current);
+            }
+        };
+        window.addEventListener('popstate', onPopState);
+        return () => window.removeEventListener('popstate', onPopState);
+    }, []);
 
     // Warn before closing/reloading the tab with unsaved changes.
     useEffect(() => {
@@ -72,11 +107,9 @@ const Admin = () => {
         setAuthChecked(true);
     }), [auth]);
 
-    let actionComponent = null;
-    if (action === 'add product' || action === 'update product')
-        actionComponent = <ProductManager key={action} action={action} onDirtyChange={setIsDirty} /> // key: switching add/update starts fresh
-    else if (action === 'set rally abroad')
-        actionComponent = <AbroadEdit onDirtyChange={setIsDirty} />
+    const sectionComponent = section === 'abroad' ?
+        <AbroadEdit onDirtyChange={setIsDirty} /> :
+        <ProductManager productParam={productParam} navigate={navigate} onDirtyChange={setIsDirty} />;
 
     if (!authChecked) {
         return <article className='page-container'><Loader /></article>;
@@ -92,15 +125,18 @@ const Admin = () => {
                         <button className='button' onClick={signOut}>התנתק</button>
                     </div>
                 </header>
-                <div className="admin-menu" role="radiogroup" aria-label="מה תרצה לעשות?">
-                    {ACTIONS.map(({ value, label }) => (
-                        <label key={value} className="segment">
-                            <input type="radio" name="admin-action" value={value} checked={action === value} onChange={() => changeAction(value)} />
+                <div className='admin-tabs' role='tablist'>
+                    {TABS.map(({ value, label }) => (
+                        <button key={value} id={`tab-${value}`} type='button' role='tab' aria-selected={section === value}
+                            className={'admin-tab' + (section === value ? ' active' : '')}
+                            onClick={() => navigate(value === 'abroad' ? { section: 'abroad' } : {})}>
                             {label}
-                        </label>
+                        </button>
                     ))}
                 </div>
-                {actionComponent}
+                <div role='tabpanel' aria-labelledby={`tab-${section}`}>
+                    {sectionComponent}
+                </div>
             </article>
         );
     }

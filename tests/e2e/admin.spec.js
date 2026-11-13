@@ -30,11 +30,12 @@ async function expectDialog(page, text) {
   await page.locator('.dialog').getByRole('button', { name: 'אישור' }).click();
 }
 
+const productRow = (page, title) => page.locator('.product-row').filter({ hasText: title });
+
 async function openProductForEdit(page) {
-  await expect(page.getByLabel('עריכת מוצר')).toBeChecked(); // default tab
-  await page.locator('#pick-category').selectOption('roadbook-holders');
-  await page.locator('#pick-subcategory').selectOption('mounts');
-  await page.locator('#pick-product').selectOption({ label: TITLE }); // picking opens it
+  await expect(page.getByRole('tab', { name: 'מוצרים' })).toHaveAttribute('aria-selected', 'true'); // default tab
+  await page.getByLabel('חיפוש לפי שם').fill(TITLE);
+  await productRow(page, TITLE).click();
   await expect(page.getByRole('heading', { name: `עדכון מוצר "${TITLE}"` })).toBeVisible();
 }
 
@@ -48,7 +49,8 @@ test('wrong password shows an error', async ({ page }) => {
 
 test('add a product with an image → appears on the site', async ({ page, request }) => {
   await login(page);
-  await page.getByLabel('מוצר חדש').check();
+  await page.getByRole('button', { name: '+ מוצר חדש' }).click();
+  await expect(page.getByRole('heading', { name: 'הוספת מוצר' })).toBeVisible();
   await page.getByLabel('כותרת').fill(TITLE);
   await page.getByLabel('מחיר', { exact: true }).fill('321');
   await page.getByLabel('תיאור').fill('תיאור מוצר בדיקה');
@@ -62,6 +64,8 @@ test('add a product with an image → appears on the site', async ({ page, reque
   await page.locator('.form .ql-toolbar button.ql-list[value="bullet"]').click(); // Quill 2 list → must render as a real <ul>
   await page.getByRole('button', { name: 'העלה מוצר' }).click();
   await expectDialog(page, 'ההעלאה בוצעה בהצלחה');
+  await expect(page.getByRole('heading', { name: `עדכון מוצר "${TITLE}"` })).toBeVisible(); // the new product stays open
+  await expect(page).toHaveURL(/\?product=-/);
 
   if (STATIC) {
     const saved = await findProductInDb(request, TITLE);
@@ -111,17 +115,45 @@ test('edit the product → change is live without a rebuild', async ({ page, req
   await expect(page.locator('.percent-off')).toHaveText('20% הנחה');
 });
 
+test('product list shows status badges', async ({ page }) => {
+  await login(page);
+  await expect(productRow(page, 'סיפור דרך במבצע').locator('.badge')).toHaveText(['מבצע', 'אזל מהמלאי']);
+  await expect(productRow(page, 'מוצר מוסתר').locator('.badge')).toHaveText(['מוסתר']);
+  await expect(productRow(page, 'מוצר מוסתר')).toHaveClass(/is-hidden/);
+  await page.getByLabel('קטגוריה').selectOption('garmin');
+  await expect(page.locator('.product-row')).toHaveCount(2);
+  await page.getByLabel('חיפוש לפי שם').fill('אין כזה מוצר');
+  await expect(page.getByText('לא נמצאו מוצרים.')).toBeVisible();
+  await page.getByRole('button', { name: 'נקה סינון' }).click();
+  await expect(page.getByLabel('חיפוש לפי שם')).toHaveValue('');
+  await expect(productRow(page, 'מוצר מוסתר')).toBeVisible(); // all categories again
+});
+
+test('back button and deep links', async ({ page }) => {
+  await login(page);
+  await productRow(page, 'סיפור דרך לבדיקה').click();
+  await expect(page.getByRole('heading', { name: 'עדכון מוצר "סיפור דרך לבדיקה"' })).toBeVisible();
+  await page.goBack();
+  await expect(page.getByLabel('חיפוש לפי שם')).toBeVisible(); // back on the list, still in the admin page
+  await page.goto('/admin/?product=-TestRoadbook1'); // still signed in
+  await expect(page.getByRole('heading', { name: 'עדכון מוצר "סיפור דרך לבדיקה"' })).toBeVisible();
+  await page.goto('/admin/?product=nope');
+  await expectDialog(page, 'המוצר לא נמצא');
+  await expect(page.getByLabel('חיפוש לפי שם')).toBeVisible();
+});
+
 test('unsaved changes ask before leaving the product', async ({ page }) => {
   await login(page);
   await openProductForEdit(page);
   await page.getByLabel('כותרת').fill(`${TITLE} שינוי`);
   page.once('dialog', (d) => d.dismiss()); // "stay"
-  await page.getByLabel('מוצר חדש').click(); // controlled radio stays on edit
-  await expect(page.getByLabel('עריכת מוצר')).toBeChecked();
+  await page.getByRole('tab', { name: 'ראליים בחו"ל' }).click();
+  await expect(page.getByRole('tab', { name: 'מוצרים' })).toHaveAttribute('aria-selected', 'true');
   await expect(page.getByLabel('כותרת')).toHaveValue(`${TITLE} שינוי`);
   page.once('dialog', (d) => d.accept()); // "leave without saving"
-  await page.getByRole('button', { name: 'סגור' }).click();
+  await page.getByRole('button', { name: '→ חזרה לרשימה' }).click();
   await expect(page.getByLabel('כותרת')).toHaveCount(0);
+  await expect(page.getByLabel('חיפוש לפי שם')).toBeVisible();
 });
 
 test('delete the product → page is gone', async ({ page, request }) => {
@@ -131,6 +163,7 @@ test('delete the product → page is gone', async ({ page, request }) => {
   page.once('dialog', (d) => d.accept());
   await page.getByRole('button', { name: 'מחק מוצר' }).click();
   await expectDialog(page, 'המוצר נמחק בהצלחה');
+  await expect(page.getByLabel('חיפוש לפי שם')).toBeVisible(); // back on the list
 
   if (STATIC) {
     expect(await findProductInDb(request, TITLE)).toBeNull();
@@ -142,7 +175,7 @@ test('delete the product → page is gone', async ({ page, request }) => {
 
 test('edit rally-abroad content', async ({ page, request }) => {
   await login(page);
-  await page.getByLabel('עריכת תוכן ראליים בחו"ל').check();
+  await page.getByRole('tab', { name: 'ראליים בחו"ל' }).click();
   const editor = page.locator('.abroad-edit .ql-editor');
   await expect(editor).toContainText('הראלי הבא: מרוקו 2027');
   const original = await editor.innerHTML();
@@ -159,7 +192,7 @@ test('edit rally-abroad content', async ({ page, request }) => {
 
   // Restore the fixture content for the other specs.
   await page.goto('/admin/');
-  await page.getByLabel('עריכת תוכן ראליים בחו"ל').check();
+  await page.getByRole('tab', { name: 'ראליים בחו"ל' }).click();
   await expect(editor).toContainText('עדכון בדיקה');
   await editor.evaluate((el, html) => { el.innerHTML = html; }, original);
   await expect(editor).toContainText('הראלי הבא: מרוקו 2027');
