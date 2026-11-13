@@ -2,7 +2,7 @@
 :HL["/_next/static/chunks/1du0q8whzh4wa.css","style"]
 :HL["/_next/static/chunks/0tkrpf4-tvpro.css","style"]
 :HL["/_next/static/chunks/2e3f0-o9dbwan.css","style"]
-:HL["/_next/static/chunks/2gzwwkff62dhb.css","style"]
+:HL["/_next/static/chunks/3tbgxzvfcgvpi.css","style"]
 :HL["/_next/static/chunks/1-rhhie_1ztrq.css","style"]
 :HL["/_next/static/chunks/3u2-n4ml14m3j.css","style"]
 :HL["/_next/static/media/WhatsApp.1cesidbvqioxt.png","image"]
@@ -11,4 +11,4 @@
 3:[["children",{"s":"__PAGE__","h":160}]]
 2:[["children",{"s":{"n":"slug","t":"oc","k":"wheels","s":[]},"h":65632,"c":"$Q3"}]]
 1:[["children",{"s":"products","h":131168,"c":"$Q2"}]]
-0:{"b":"4u34R_IVw497P-turBqVm","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
+0:{"b":"g3i73QDs8G5i8D0s_sd_f","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
