@@ -50,8 +50,7 @@ const ProductManager = ({ productParam, navigate, onDirtyChange }) => {
             navigate({}, { replace: true, force: true });
             if (image) {
                 deleteObject(storageRef(storage, image))
-                    .then(() => console.log('image deleted successfully!'))
-                    .catch((error) => console.log('error in deleting image:' + error));
+                    .catch((error) => console.error('Failed to delete product image:', error));
             }
             await refreshPublicPages(auth, ['products']);
             setDialogContent('המוצר נמחק בהצלחה.' + PUBLISH_NOTE);
