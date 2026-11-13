@@ -28,7 +28,8 @@ export const viewport = {
 
 // Old links looked like rallytrip.com/#/products/... (HashRouter). Send them to the real URL
 // before React loads so visitors and crawlers that execute JS land on the right page.
-const legacyHashRedirect = `(function(){var h=location.hash;if(h&&h.indexOf('#/')===0){var p=h.slice(1).replace(/\\/+$/,'');location.replace(p+'/');}})();`;
+// Only same-origin targets: '#//evil.com' or '#/\evil.com' would otherwise be an open redirect.
+const legacyHashRedirect = `(function(){var h=location.hash;if(h&&h.indexOf('#/')===0){var u=new URL(h.slice(1).replace(/\\/+$/,'')+'/',location.href);if(u.origin===location.origin)location.replace(u.href);}})();`;
 
 const organizationJsonLd = {
   '@context': 'https://schema.org',

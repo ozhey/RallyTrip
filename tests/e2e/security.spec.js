@@ -43,6 +43,17 @@ test.describe('Firebase security rules', () => {
     expect(upload.status()).toBe(403);
   });
 
+  test('an allowlisted email that is not verified cannot write', async ({ request }) => {
+    const token = await idToken(request, 'unverified-admin@rallytrip.test', 'unverified-password');
+    const db = await request.put(`${DB}/abroad.json?${NS}&auth=${token}`, { data: '"hacked"' });
+    expect(db.status()).toBe(401);
+    const upload = await request.post(`${STORAGE}?name=${encodeURIComponent('products/-Evil/image.png')}`, {
+      headers: { Authorization: `Firebase ${token}`, 'Content-Type': 'image/png' },
+      data: Buffer.from('not really a png'),
+    });
+    expect(upload.status()).toBe(403);
+  });
+
   test('an admin can write, but not outside the allowed paths', async ({ request }) => {
     const token = await idToken(request, 'admin@rallytrip.test', 'admin-password');
     const ok = await request.put(`${DB}/products/-TestRoadbook1/stock.json?${NS}&auth=${token}`, { data: '"4"' });

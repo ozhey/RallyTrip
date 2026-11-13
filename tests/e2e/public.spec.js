@@ -88,6 +88,15 @@ test('legacy hash URLs redirect to real paths', async ({ page }) => {
   await expect(page).toHaveURL(/\/rally-abroad\/$/);
 });
 
+test('legacy hash redirect never leaves the site', async ({ page, baseURL }) => {
+  const origin = new URL(baseURL).origin;
+  for (const hash of ['#//example.com', '#/\\example.com']) {
+    await page.goto(`/${hash}`);
+    await page.waitForLoadState('load');
+    expect(new URL(page.url()).origin, hash).toBe(origin);
+  }
+});
+
 test('rally abroad and nav guide pages', async ({ page }) => {
   await page.goto('/rally-abroad');
   await expect(page.getByText('הראלי הבא: מרוקו 2027')).toBeVisible();

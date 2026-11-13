@@ -18,8 +18,12 @@ describe('isAdminEmail', () => {
 
 describe('verifyIdToken', () => {
   it('returns the email for a valid token', async () => {
-    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => ({ users: [{ email: 'Raz@Example.com' }] }) })));
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => ({ users: [{ email: 'Raz@Example.com', emailVerified: true }] }) })));
     await expect(verifyIdToken('x'.repeat(40))).resolves.toBe('raz@example.com');
+  });
+  it('returns null for an unverified email', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => ({ users: [{ email: 'raz@example.com', emailVerified: false }] }) })));
+    await expect(verifyIdToken('x'.repeat(40))).resolves.toBeNull();
   });
   it('returns null when Firebase rejects the token', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, json: async () => ({}) })));

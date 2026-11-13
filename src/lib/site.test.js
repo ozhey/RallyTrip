@@ -12,6 +12,10 @@ describe('legacyHashToPath', () => {
     expect(legacyHashToPath('')).toBeNull();
     expect(legacyHashToPath(undefined)).toBeNull();
   });
+  it('rejects hashes that would leave the site', () => {
+    expect(legacyHashToPath('#//evil.com')).toBeNull();
+    expect(legacyHashToPath('#/\\evil.com')).toBeNull();
+  });
 });
 
 describe('trailing slashes', () => {

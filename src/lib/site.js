@@ -32,5 +32,7 @@ export function absoluteUrl(path) {
  */
 export function legacyHashToPath(hash) {
   if (typeof hash !== 'string' || !hash.startsWith('#/')) return null;
+  // '#//host' and '#/\host' resolve to another origin — never a legacy route.
+  if (/^#\/[/\\]/.test(hash)) return null;
   return withSlash(withoutSlash(hash.slice(1)));
 }

@@ -3,15 +3,19 @@
 //   firebase/database.rules.json, firebase/storage.rules   (git-ignored — they contain admin emails)
 //
 //   node scripts/build-rules.mjs              # production: ADMIN_EMAILS from env or .env.local (required)
-//   node scripts/build-rules.mjs --emulator   # local emulators/tests: adds admin@rallytrip.test
+//   node scripts/build-rules.mjs --emulator   # local emulators/tests: adds the test admins below
 //
-// Rules: everyone can read; only the listed admin emails can write.
-// Accounts can only be created from the Firebase console (sign-up is disabled there),
-// so the email in the auth token is trustworthy.
+// Rules: everyone can read; only the listed admin emails can write, and only with a verified email.
+// Accounts are meant to be created from the Firebase console only (sign-up disabled there); the
+// email_verified check keeps the rules safe even if sign-up is ever re-enabled.
+// Deploy with `npm run rules:deploy` (it rebuilds for production first) — a plain `firebase deploy`
+// after `npm run emulators` would ship the emulator rules with the test admins.
 
 import { readFile, writeFile } from 'node:fs/promises';
 
 export const TEST_ADMIN = 'admin@rallytrip.test';
+// Allowlisted but never verified by the seed script — proves the email_verified check in tests.
+export const TEST_UNVERIFIED_ADMIN = 'unverified-admin@rallytrip.test';
 const EMAIL = /^[^\s@'"\\]+@[^\s@'"\\]+\.[^\s@'"\\]+$/;
 
 async function adminEmailsFromEnv() {
@@ -32,16 +36,18 @@ export function parseEmails(value) {
 }
 
 export function databaseCondition(emails) {
-  return `auth != null && (${emails.map((e) => `auth.token.email === '${e}'`).join(' || ')})`;
+  return `auth != null && auth.token.email_verified === true && (${emails.map((e) => `auth.token.email === '${e}'`).join(' || ')})`;
 }
 
 export function storageCondition(emails) {
-  return `request.auth != null && request.auth.token.email in [${emails.map((e) => `'${e}'`).join(', ')}]`;
+  return `request.auth != null && request.auth.token.email_verified == true && request.auth.token.email in [${emails.map((e) => `'${e}'`).join(', ')}]`;
 }
 
 export async function buildRules({ emulator = false } = {}) {
   const emails = parseEmails(await adminEmailsFromEnv());
-  if (emulator && !emails.includes(TEST_ADMIN)) emails.push(TEST_ADMIN);
+  if (emulator) {
+    for (const email of [TEST_ADMIN, TEST_UNVERIFIED_ADMIN]) if (!emails.includes(email)) emails.push(email);
+  }
   if (!emails.length) throw new Error('ADMIN_EMAILS is empty — set it in .env.local (comma-separated).');
 
   const db = (await readFile('firebase/database.rules.template.json', 'utf8')).replaceAll('__IS_ADMIN__', databaseCondition(emails));

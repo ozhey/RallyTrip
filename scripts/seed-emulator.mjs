@@ -13,6 +13,8 @@ export const EMULATOR_PROJECT = 'demo-rallytrip';
 export const ADMIN = { email: 'admin@rallytrip.test', password: 'admin-password' };
 // A signed-in user who is NOT an admin — used to prove the rules block writes from other accounts.
 export const NON_ADMIN = { email: 'user@rallytrip.test', password: 'user-password' };
+// On the emulator rules' admin list but left unverified — the rules must still block it.
+export const UNVERIFIED_ADMIN = { email: 'unverified-admin@rallytrip.test', password: 'unverified-password' };
 const DB = `http://127.0.0.1:9000/.json?ns=${EMULATOR_PROJECT}-default-rtdb`;
 const AUTH = 'http://127.0.0.1:9099';
 
@@ -26,13 +28,22 @@ export async function seedEmulator(file = 'tests/fixtures/seed.json') {
   if (!put.ok) throw new Error(`Seeding database failed: ${put.status} ${await put.text()}`);
 
   await fetch(`${AUTH}/emulator/v1/projects/${EMULATOR_PROJECT}/accounts`, { method: 'DELETE' });
-  for (const user of [ADMIN, NON_ADMIN]) {
+  for (const user of [ADMIN, NON_ADMIN, UNVERIFIED_ADMIN]) {
     const signUp = await fetch(`${AUTH}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=demo-api-key`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...user, returnSecureToken: true }),
     });
     if (!signUp.ok) throw new Error(`Creating ${user.email} failed: ${signUp.status} ${await signUp.text()}`);
+    if (user === UNVERIFIED_ADMIN) continue;
+    // Console-created accounts are verified; the rules require it.
+    const { localId } = await signUp.json();
+    const verify = await fetch(`${AUTH}/identitytoolkit.googleapis.com/v1/projects/${EMULATOR_PROJECT}/accounts:update`, {
+      method: 'POST',
+      headers: { Authorization: 'Bearer owner', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ localId, emailVerified: true }),
+    });
+    if (!verify.ok) throw new Error(`Verifying ${user.email} failed: ${verify.status} ${await verify.text()}`);
   }
   return data;
 }
