@@ -29,4 +29,10 @@ describe('hasRichText', () => {
     expect(hasRichText('')).toBe(false);
     expect(hasRichText('<p class="ql-align-right ql-direction-rtl">some real content here</p>')).toBe(true);
   });
+  it('counts short content, images and embeds', () => {
+    expect(hasRichText('<ul><li>פרטים נוספים על מוצר הבדיקה</li></ul>')).toBe(true);
+    expect(hasRichText('<p><img src="https://x/y.png"></p>')).toBe(true);
+    expect(hasRichText('<p>&nbsp;</p><p><br></p>')).toBe(false);
+    expect(hasRichText(null)).toBe(false);
+  });
 });

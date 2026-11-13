@@ -30,7 +30,12 @@ export function sanitizeRichText(html) {
   return typeof html === 'string' ? sanitizeHtml(html, OPTIONS) : '';
 }
 
-/** Quill's "empty" RTL document is 51 chars long (same check as the original site). */
+/**
+ * True when the Quill HTML has something to show: any text, an image or an embed.
+ * (A blank Quill document is just empty paragraphs/<br>s; short content such as a one-item list still counts.)
+ */
 export function hasRichText(html) {
-  return typeof html === 'string' && html.length > 51;
+  if (typeof html !== 'string' || !html) return false;
+  if (/<(img|iframe)\b/i.test(html)) return true;
+  return html.replace(/<[^>]*>/g, '').replace(/&nbsp;|\u00a0/g, ' ').trim().length > 0;
 }
