@@ -6,7 +6,7 @@ import ReactQuill from 'react-quill-new';
 import { get, push, ref, update } from 'firebase/database';
 import { getDownloadURL, ref as storageRef, uploadBytesResumable } from 'firebase/storage';
 import { getFirebase } from '@/lib/firebase/client';
-import { categoryOptions, pagePrice, subcategoryOptions, toNumber } from '@/lib/products';
+import { categoryOptions, pagePrice, priorityOf, subcategoryOptions, toNumber } from '@/lib/products';
 import { normalizeQuillSpaces } from '@/lib/quillHtml';
 import ImageUploader from './ImageUploader';
 import { modules, formats, EMPTY_EDITOR_VALUE } from './quillConfig';
@@ -80,7 +80,16 @@ const PricePreview = ({ price, discount }) => {
  * Add/edit form for one product. Mounted per product (key), so its starting values come from `product`.
  * productId undefined = new product. The parent owns navigation, the loader and the dialog.
  */
-const ProductForm = ({ productId, product, onBack, onCreated, onDelete, onDirtyChange, setBusy, notify }) => {
+/** Other visible products in a category that have a priority, highest first, as "name (n)". */
+function prioritizedPeers(products, category, productId, limit = 6) {
+    return Object.entries(products ?? {})
+        .filter(([id, p]) => id !== productId && p.category === category && p.hide !== true && priorityOf(p) > 0)
+        .sort(([, a], [, b]) => priorityOf(b) - priorityOf(a))
+        .slice(0, limit)
+        .map(([, p]) => `${String(p.title ?? '').trim()} (${priorityOf(p)})`);
+}
+
+const ProductForm = ({ productId, product, products, onBack, onCreated, onDelete, onDirtyChange, setBusy, notify }) => {
     const { db, auth, storage } = getFirebase();
     const [initial] = useState(() => toFormValues(product));
 
@@ -94,6 +103,7 @@ const ProductForm = ({ productId, product, onBack, onCreated, onDelete, onDirtyC
 
     const [categorySelectedProd, uploadedImage, price, discount] = useWatch({ control, name: ['category', 'image', 'price', 'discount'] });
     const isDirty = Object.keys(dirtyFields).length > 0 || editor.touched;
+    const peers = prioritizedPeers(products, categorySelectedProd, productId);
 
     useEffect(() => { onDirtyChange(isDirty); }, [isDirty, onDirtyChange]);
 
@@ -216,9 +226,14 @@ const ProductForm = ({ productId, product, onBack, onCreated, onDelete, onDirtyC
                                 {errors.stock && <span className="error">יש להכניס מספר מוצרים במלאי (אפשר 0)</span>}
                             </div>
                             <div className='field'>
-                                <label htmlFor='priority'>עדיפות</label>
+                                <label htmlFor='priority'>עדיפות בתצוגה</label>
                                 <input id='priority' type='number' inputMode='numeric' {...register('priority')} placeholder="0" />
-                                <span className='hint'>מספר גבוה יותר = המוצר יוצג גבוה יותר ברשימה</span>
+                                <span className='hint'>
+                                    מספר גבוה = מופיע ראשון ברשימות באתר.
+                                    ריק או 0 = סדר רגיל (מוצרים במלאי קודם, ואז לפי שם).
+                                    {peers.length ?
+                                        <span className='priority-peers'>{`כבר מקודמים בקטגוריה: ${peers.join(' · ')}`}</span> : null}
+                                </span>
                             </div>
                         </div>
                         <label className='checkbox-row' htmlFor='hide'>

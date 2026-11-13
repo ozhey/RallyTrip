@@ -69,7 +69,7 @@ const ProductManager = ({ productParam, navigate, onDirtyChange }) => {
     } else if (productId && !product) {
         content = <Loader />; // still loading (or about to go back to the list)
     } else {
-        content = <ProductForm key={productParam} productId={productId} product={product}
+        content = <ProductForm key={productParam} productId={productId} product={product} products={products}
             onBack={() => navigate({})}
             onCreated={(id) => navigate({ product: id }, { replace: true, force: true })}
             onDelete={deleteProduct}

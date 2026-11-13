@@ -10,8 +10,11 @@ import {
   pagePrice,
   previewPrice,
   productPath,
+  parseSort,
+  priorityOf,
   salePrice,
   resolveCategoryNames,
+  sortProducts,
   subcategoryOptions,
 } from './products';
 
@@ -38,8 +41,57 @@ describe('filterAndSortProducts', () => {
   it('never includes hidden products', () => {
     expect(ids({ category: 'garmin', subcategory: 'watches' })).not.toContain('d');
   });
+  it('breaks priority ties by stock, then name (not database key order)', () => {
+    const shop = {
+      z: { title: 'Z', stock: '1' },
+      y: { title: 'Y', stock: '0' },
+      x: { title: 'X', stock: '2' },
+    };
+    expect(filterAndSortProducts(shop).map(([id]) => id)).toEqual(['x', 'z', 'y']);
+  });
   it('handles empty/null data', () => {
     expect(filterAndSortProducts(null)).toEqual([]);
+  });
+});
+
+describe('sortProducts', () => {
+  const items = [
+    ['p1', { title: 'בננה', price: '200', discount: '150', stock: '0', priority: '5' }], // effective 150
+    ['p2', { title: 'אגס', price: '0', stock: '3', priority: '5' }], // contact for price
+    ['p3', { title: 'גזר', price: '90', stock: '1', priority: '0' }],
+    ['p4', { title: 'דובדבן', price: '150', stock: '2', priority: '0' }],
+    ['p5', { title: ' Zebra', stock: '1' }], // contact for price; leading space is ignored
+    ['p6', { title: 'גזר', price: '90', stock: '0', priority: '0' }],
+  ];
+  const ids = (sort) => sortProducts(items, sort).map(([id]) => id);
+
+  it('default: priority, then in stock first, then name', () => {
+    expect(ids('recommended')).toEqual(['p2', 'p1', 'p3', 'p4', 'p5', 'p6']);
+    expect(ids(undefined)).toEqual(['p2', 'p1', 'p3', 'p4', 'p5', 'p6']);
+    expect(ids('bogus')).toEqual(['p2', 'p1', 'p3', 'p4', 'p5', 'p6']);
+  });
+  it('price: effective (sale) price, unpriced last, then in stock first, then name', () => {
+    expect(ids('price-asc')).toEqual(['p3', 'p6', 'p4', 'p1', 'p2', 'p5']);
+    expect(ids('price-desc')).toEqual(['p4', 'p1', 'p3', 'p6', 'p2', 'p5']);
+  });
+  it('name (Hebrew collation: Hebrew before Latin), then in stock first', () => {
+    expect(ids('name')).toEqual(['p2', 'p1', 'p3', 'p6', 'p4', 'p5']);
+  });
+  it('does not modify the input', () => {
+    sortProducts(items, 'name');
+    expect(items.map(([id]) => id)).toEqual(['p1', 'p2', 'p3', 'p4', 'p5', 'p6']);
+  });
+  it('priorityOf treats empty / invalid values as 0', () => {
+    expect(priorityOf({ priority: '90' })).toBe(90);
+    expect(priorityOf({ priority: '' })).toBe(0);
+    expect(priorityOf({ priority: 'x' })).toBe(0);
+    expect(priorityOf({})).toBe(0);
+    expect(priorityOf(undefined)).toBe(0);
+  });
+  it('parseSort falls back to the default', () => {
+    expect(parseSort('price-asc')).toBe('price-asc');
+    expect(parseSort('nope')).toBe('recommended');
+    expect(parseSort(null)).toBe('recommended');
   });
 });
 

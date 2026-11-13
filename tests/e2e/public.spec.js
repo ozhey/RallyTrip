@@ -17,12 +17,32 @@ test('home page', async ({ page }) => {
   await expect(page.locator('.featured-grid').getByText('מוצר מוסתר')).toHaveCount(0);
 });
 
-// Ties keep database key order (same as the old site).
+// Priority (high first), then in stock first, then by name.
 test('all products: visible ones sorted by priority, hidden excluded', async ({ page }) => {
   await page.goto('/products');
   const titles = page.locator('.products-container .preview-container .preview-bot > div:first-child');
   await expect(titles).toHaveText(['סיפור דרך במבצע', 'סיפור דרך לבדיקה', 'מכשיר גרמין לבדיקה', 'שעון גרמין לבדיקה']);
   await expect(page.getByText('מוצר מוסתר')).toHaveCount(0);
+});
+
+test('all products: sort menu re-orders the grid and keeps the choice in the URL', async ({ page }) => {
+  await page.goto('/products');
+  const titles = page.locator('.products-container .preview-container .preview-bot > div:first-child');
+  const sort = page.getByLabel('מיון:');
+  await expect(sort).toHaveValue('recommended');
+
+  // Effective (sale) prices: 120, 150 (200 on sale), 999; "contact for price" last.
+  await sort.selectOption('price-asc');
+  await expect(page).toHaveURL(/[?&]sort=price-asc/);
+  await expect(titles).toHaveText(['סיפור דרך לבדיקה', 'סיפור דרך במבצע', 'מכשיר גרמין לבדיקה', 'שעון גרמין לבדיקה']);
+
+  await page.reload();
+  await expect(page.getByLabel('מיון:')).toHaveValue('price-asc');
+  await expect(titles.first()).toHaveText('סיפור דרך לבדיקה');
+
+  await page.getByLabel('מיון:').selectOption('recommended');
+  await expect(page).not.toHaveURL(/sort=/);
+  await expect(titles.first()).toHaveText('סיפור דרך במבצע');
 });
 
 test('category and subcategory listings', async ({ page }) => {

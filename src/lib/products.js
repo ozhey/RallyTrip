@@ -33,19 +33,75 @@ export function subcategoryOptions(categorySlug) {
   }));
 }
 
+/** Listing sort options, in menu order. The first one is the default (admin-set priority). */
+export const SORT_OPTIONS = [
+  { value: 'recommended', label: 'מומלצים' },
+  { value: 'price-asc', label: 'מחיר: מהנמוך לגבוה' },
+  { value: 'price-desc', label: 'מחיר: מהגבוה לנמוך' },
+  { value: 'name', label: 'שם: א-ת' },
+];
+
+export const DEFAULT_SORT = SORT_OPTIONS[0].value;
+
+/** A known sort value, or the default for anything else (e.g. a hand-edited ?sort= param). */
+export function parseSort(value) {
+  return SORT_OPTIONS.some((option) => option.value === value) ? value : DEFAULT_SORT;
+}
+
+const titleCollator = new Intl.Collator('he', { numeric: true, sensitivity: 'base' });
+
+// Trim: some older titles start with a space.
+const byName = (a, b) => titleCollator.compare((a.title ?? '').trim(), (b.title ?? '').trim());
+/** Admin-set display priority as a number (empty / invalid → 0). Higher shows first. */
+export const priorityOf = (product) => parseInt(product?.priority) || 0;
+
+const byPriority = (a, b) => priorityOf(b) - priorityOf(a);
+const byStock = (a, b) => isInStock(b) - isInStock(a);
+
+/** Products without a price ("contact for price") go last in both directions. */
+const byPrice = (direction) => (a, b) => {
+  const pa = effectivePrice(a);
+  const pb = effectivePrice(b);
+  if (pa === null || pb === null) return (pa === null) - (pb === null);
+  return (pa - pb) * direction;
+};
+
+const PRIMARY = {
+  recommended: byPriority,
+  'price-asc': byPrice(1),
+  'price-desc': byPrice(-1),
+  name: byName,
+};
+
 /**
- * Visible products for a listing, sorted by priority (high first).
+ * Compares two products the way the shop orders them: the chosen sort first,
+ * then in-stock before out-of-stock, then by name. Unknown sort values use the default (priority).
+ */
+export function compareProducts(a, b, sort = DEFAULT_SORT) {
+  return PRIMARY[parseSort(sort)](a, b) || byStock(a, b) || byName(a, b);
+}
+
+/**
+ * Sorts [id, product] pairs with compareProducts.
+ * @param {Array<[string, object]>} items [id, product] pairs
+ * @returns {Array<[string, object]>} a new array (the input is not modified)
+ */
+export function sortProducts(items, sort = DEFAULT_SORT) {
+  return [...items].sort(([, a], [, b]) => compareProducts(a, b, sort));
+}
+
+/**
+ * Visible products for a listing, in default order (see sortProducts).
  * Same matching as the original SPA: a subcategory filter matches on subcategory alone.
  * @returns {Array<[string, object]>} [id, product] pairs
  */
 export function filterAndSortProducts(products, { category, subcategory } = {}) {
-  return Object.entries(products ?? {})
-    .filter(
-      ([, p]) =>
-        (!category || (category === p.category && !subcategory) || subcategory === p.subcategory) &&
-        p.hide !== true,
-    )
-    .sort(([, a], [, b]) => (parseInt(b.priority) || 0) - (parseInt(a.priority) || 0));
+  const visible = Object.entries(products ?? {}).filter(
+    ([, p]) =>
+      (!category || (category === p.category && !subcategory) || subcategory === p.subcategory) &&
+      p.hide !== true,
+  );
+  return sortProducts(visible);
 }
 
 /** Canonical URL path of a product page. */

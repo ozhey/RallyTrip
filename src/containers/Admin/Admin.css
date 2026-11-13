@@ -264,6 +264,16 @@
     color: var(--ink-2);
 }
 
+.badge.priority {
+    background: var(--accent);
+    color: var(--accent-ink);
+}
+
+.priority-peers {
+    display: block;
+    margin-top: 4px;
+}
+
 .list-empty {
     padding: 24px 0;
     text-align: center;

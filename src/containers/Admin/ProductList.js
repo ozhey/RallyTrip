@@ -1,17 +1,17 @@
 'use client';
 
-import { categoryOptions, isInStock, pagePrice, resolveCategoryNames, subcategoryOptions } from '@/lib/products';
+import { categoryOptions, compareProducts, isInStock, pagePrice, priorityOf, resolveCategoryNames, subcategoryOptions } from '@/lib/products';
 import './Admin.css';
 
 const CATEGORIES = categoryOptions();
 const CATEGORY_ORDER = Object.fromEntries(CATEGORIES.map(({ value }, i) => [value, i]));
 
-// Same order customers see: by category, then priority (high first); hidden products last in each category.
-function compareProducts([, a], [, b]) {
+// Grouped by category, hidden products last in each; within that, the same order customers see
+// on the category page (priority, then in stock, then name).
+function compareRows([, a], [, b]) {
     return (CATEGORY_ORDER[a.category] ?? 999) - (CATEGORY_ORDER[b.category] ?? 999) ||
         (a.hide === true) - (b.hide === true) ||
-        (parseInt(b.priority) || 0) - (parseInt(a.priority) || 0) ||
-        String(a.title ?? '').localeCompare(String(b.title ?? ''), 'he');
+        compareProducts(a, b);
 }
 
 const RowPrice = ({ product }) => {
@@ -25,6 +25,7 @@ const ProductRow = ({ product, onOpen }) => {
     const { title, image, category, subcategory, hide } = product;
     const { categoryName, subcategoryName } = resolveCategoryNames(category, subcategory);
     const onSale = pagePrice(product).kind === 'discount';
+    const priority = priorityOf(product);
     return (
         <li>
             <button type='button' className={'product-row' + (hide === true ? ' is-hidden' : '')} onClick={onOpen}>
@@ -38,6 +39,7 @@ const ProductRow = ({ product, onOpen }) => {
                 <span className='row-meta'>
                     <span className='row-price'><RowPrice product={product} /></span>
                     <span className='row-badges'>
+                        {priority ? <span className='badge priority' title='עדיפות בתצוגה'>{`עדיפות ${priority}`}</span> : null}
                         {onSale ? <span className='badge sale'>מבצע</span> : null}
                         {!isInStock(product) ? <span className='badge out'>אזל מהמלאי</span> : null}
                         {hide === true ? <span className='badge hidden'>מוסתר</span> : null}
@@ -59,7 +61,7 @@ const ProductList = ({ products, loaded, filters, setFilters, onOpen, onNew }) =
         .filter(([, p]) => (!category || p.category === category) &&
             (!subcategory || p.subcategory === subcategory) &&
             (!query || String(p.title ?? '').includes(query)))
-        .sort(compareProducts);
+        .sort(compareRows);
 
     return (
         <section className='product-list-section'>
