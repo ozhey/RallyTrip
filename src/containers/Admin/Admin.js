@@ -46,7 +46,7 @@ const Admin = () => {
             await setPersistence(auth, persistence ? browserLocalPersistence : inMemoryPersistence);
             await signInWithEmailAndPassword(auth, email, password);
         } catch (error) {
-            console.log(`Error code: ${error.code}`);
+            console.warn(`Sign-in failed: ${error.code}`);
             setError('login', { type: 'manual', message: 'אימייל או סיסמה שגויים' });
         } finally {
             setIsLoading(false);
@@ -56,7 +56,7 @@ const Admin = () => {
     const signOut = () => {
         if (isDirty && !window.confirm(UNSAVED_WARNING)) return;
         setIsDirty(false);
-        firebaseSignOut(auth).catch((error) => console.log(error));
+        firebaseSignOut(auth).catch((error) => console.error(error));
     }
 
     /**

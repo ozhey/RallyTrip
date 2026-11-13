@@ -38,9 +38,6 @@ function toFormValues(product) {
 // Uploads a product image and resolves to its download URL.
 async function uploadProductImage(storage, productId, file) {
     const task = uploadBytesResumable(storageRef(storage, `products/${productId}/image.png`), file);
-    task.on('state_changed', (snapshot) => {
-        console.log('Upload is ' + Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100) + '% done');
-    });
     await task;
     return getDownloadURL(task.snapshot.ref);
 }

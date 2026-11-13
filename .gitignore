@@ -3,7 +3,8 @@
 
 # next.js
 /.next/
-/.next-e2e/
+# alternate distDirs (NEXT_DIST_DIR): e2e, static, preview servers
+/.next-*/
 /out/
 next-env.d.ts
 
@@ -35,6 +36,3 @@ npm-debug.log*
 # generated Firebase rules (contain admin emails) — see scripts/build-rules.mjs
 /firebase/database.rules.json
 /firebase/storage.rules
-
-/.next-e2e-static/
-/.next-static/
