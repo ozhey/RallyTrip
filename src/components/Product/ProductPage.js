@@ -10,8 +10,9 @@ const PriceTag = ({ product }) => {
     if (info.kind === 'discount') {
         return (
             <div className='price-row sale'>
-                <div className='price'>{info.discount}</div>
+                <div className='price'>{`₪${info.sale}`}</div>
                 <div className='old-price'>{`₪${info.price}`}</div>
+                <div className='percent-off'>{`${info.percentOff}% הנחה`}</div>
             </div>
         );
     }

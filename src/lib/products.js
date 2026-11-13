@@ -53,29 +53,43 @@ export function productPath(id, product) {
   return `${PRODUCTS_ROOT}${product.category}/${product.subcategory || 'sc'}/${id}`;
 }
 
+/** Number from a price-like value ("150", 150, "₪150", "150 ש\"ח"), or NaN for anything else ("10% הנחה"). */
+export function toNumber(value) {
+  if (typeof value === 'number') return value;
+  const cleaned = String(value ?? '').replace(/₪|ש"ח|ש״ח|,|\s/g, '');
+  return /^\d+(\.\d+)?$/.test(cleaned) ? parseFloat(cleaned) : NaN;
+}
+
 /**
- * Price display for the product page.
- * @returns {{kind:'discount', discount:string, price:string|number} | {kind:'price', price:string|number} | {kind:'contact'}}
+ * Sale price as a number, or null when there's no valid sale.
+ * Valid only with a regular price and a lower, positive sale price.
+ * Older products may hold free text (e.g. "₪150" or "מבצע!"); a number inside it is used, otherwise no sale.
  */
-export function pagePrice({ price = 0, discount = '' } = {}) {
-  if (price > 0 && discount !== '') return { kind: 'discount', discount, price };
+export function salePrice({ price = 0, discount = '' } = {}) {
+  const base = toNumber(price);
+  const sale = toNumber(discount);
+  return base > 0 && sale > 0 && sale < base ? sale : null;
+}
+
+/**
+ * Price display for the product page and product cards.
+ * @returns {{kind:'discount', sale:number, price:string|number, percentOff:number} | {kind:'price', price:string|number} | {kind:'contact'}}
+ */
+export function pagePrice(product = {}) {
+  const { price = 0 } = product;
+  const sale = salePrice(product);
+  if (sale !== null) return { kind: 'discount', sale, price, percentOff: Math.round((1 - sale / toNumber(price)) * 100) };
   if (price > 0) return { kind: 'price', price };
   return { kind: 'contact' };
 }
 
-/** Price display for a product card in listings (discount text wins even without a price). */
-export function previewPrice({ price = 0, discount = '' } = {}) {
-  if (discount !== '') return { kind: 'discount', discount };
-  if (price > 0) return { kind: 'price', price };
-  return { kind: 'contact' };
-}
+/** Price display for a product card in listings (same rules as the product page). */
+export const previewPrice = pagePrice;
 
-/** Numeric price for structured data, or null (discount may be free text such as "₪100"). */
-export function effectivePrice({ price = 0, discount = '' } = {}) {
-  const fromDiscount = parseFloat(String(discount).replace(/[^\d.]/g, ''));
-  if (discount !== '' && fromDiscount > 0) return fromDiscount;
-  const base = parseFloat(price);
-  return base > 0 ? base : null;
+/** Numeric price for structured data (the sale price when on sale), or null. */
+export function effectivePrice(product = {}) {
+  const base = toNumber(product.price);
+  return salePrice(product) ?? (base > 0 ? base : null);
 }
 
 export function isInStock(product) {

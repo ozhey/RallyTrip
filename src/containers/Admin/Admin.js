@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import {
     browserLocalPersistence,
     inMemoryPersistence,
@@ -16,14 +16,22 @@ import ProductManager from './ProductManager';
 import AbroadEdit from './AbroadEdit';
 import './Admin.css';
 
+const ACTIONS = [
+    { value: 'update product', label: 'עריכת מוצר' },
+    { value: 'add product', label: 'מוצר חדש' },
+    { value: 'set rally abroad', label: 'עריכת תוכן ראליים בחו"ל' },
+];
+
+const UNSAVED_WARNING = 'יש שינויים שלא נשמרו. להמשיך בלי לשמור?';
+
 const Admin = () => {
     const { auth } = getFirebase();
     const { register, handleSubmit, formState: { errors }, setError, clearErrors } = useForm();
-    const { register: register2, control: menuControl } = useForm(); // The menu form
     const [user, setUser] = useState(null);
     const [authChecked, setAuthChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const action = useWatch({ control: menuControl, name: 'action' });
+    const [action, setAction] = useState('update product'); // editing is the most common task
+    const [isDirty, setIsDirty] = useState(false); // the open editor has unsaved changes
 
     const onSubmit = async ({ email, password, persistence }) => {
         setIsLoading(true);
@@ -39,8 +47,25 @@ const Admin = () => {
     }
 
     const signOut = () => {
+        if (isDirty && !window.confirm(UNSAVED_WARNING)) return;
+        setIsDirty(false);
         firebaseSignOut(auth).catch((error) => console.log(error));
     }
+
+    const changeAction = (next) => {
+        if (next === action) return;
+        if (isDirty && !window.confirm(UNSAVED_WARNING)) return;
+        setIsDirty(false);
+        setAction(next);
+    }
+
+    // Warn before closing/reloading the tab with unsaved changes.
+    useEffect(() => {
+        if (!isDirty) return undefined;
+        const onBeforeUnload = (event) => { event.preventDefault(); event.returnValue = ''; };
+        window.addEventListener('beforeunload', onBeforeUnload);
+        return () => window.removeEventListener('beforeunload', onBeforeUnload);
+    }, [isDirty]);
 
     useEffect(() => onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
@@ -49,9 +74,9 @@ const Admin = () => {
 
     let actionComponent = null;
     if (action === 'add product' || action === 'update product')
-        actionComponent = <ProductManager key={action} action={action} /> // key: switching add/update starts fresh
+        actionComponent = <ProductManager key={action} action={action} onDirtyChange={setIsDirty} /> // key: switching add/update starts fresh
     else if (action === 'set rally abroad')
-        actionComponent = <AbroadEdit />
+        actionComponent = <AbroadEdit onDirtyChange={setIsDirty} />
 
     if (!authChecked) {
         return <article className='page-container'><Loader /></article>;
@@ -60,22 +85,21 @@ const Admin = () => {
     if (user) {
         return (
             <article className='page-container'>
-                <h2>עמוד מנהל</h2>
-                <button className='button' onClick={signOut}>התנתק</button>
-                <form className="form--compressed admin-menu">
-                    <label className="segment">
-                        <input type="radio" value="add product" {...register2('action')} />
-                        מוצר חדש
-                    </label>
-                    <label className="segment">
-                        <input type="radio" value="update product" {...register2('action')} />
-                        עריכת מוצר
-                    </label>
-                    <label className="segment">
-                        <input type="radio" value="set rally abroad" {...register2('action')} />
-                        עריכת תוכן ראליים בחו&quot;ל
-                    </label>
-                </form>
+                <header className='admin-header'>
+                    <h2>עמוד מנהל</h2>
+                    <div className='admin-user'>
+                        <span className='hint'>מחובר כ־{user.email}</span>
+                        <button className='button' onClick={signOut}>התנתק</button>
+                    </div>
+                </header>
+                <div className="admin-menu" role="radiogroup" aria-label="מה תרצה לעשות?">
+                    {ACTIONS.map(({ value, label }) => (
+                        <label key={value} className="segment">
+                            <input type="radio" name="admin-action" value={value} checked={action === value} onChange={() => changeAction(value)} />
+                            {label}
+                        </label>
+                    ))}
+                </div>
                 {actionComponent}
             </article>
         );

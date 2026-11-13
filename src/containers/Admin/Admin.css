@@ -24,23 +24,47 @@
     font-size: 0.95rem;
 }
 
-.form--compressed {
+.hint {
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 400;
+}
+
+.error {
+    color: var(--danger);
+    font-size: 0.85rem;
+}
+
+/*=============== header + menu ============*/
+
+.admin-header {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px 10px;
-    margin: 12px 0 8px;
+    justify-content: space-between;
+    gap: 8px 16px;
 }
 
-.form--compressed h3 {
-    flex-basis: 100%;
+.admin-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.form--compressed > div {
-    flex-basis: 100%;
+.admin-user .button {
+    margin: 0;
 }
 
 /* Admin menu: radio + text inside one pill (radio stays visible and clickable) */
+.admin-menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    margin: 14px 0 8px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+}
+
 .admin-menu .segment {
     display: inline-flex;
     align-items: center;
@@ -73,10 +97,80 @@
     border-color: var(--ink);
 }
 
-/*========== Style input elements ==========*/
+/*=============== product picker ============*/
 
-.form input[type=text], .form input[type=password], .form input[type=number], .form textarea, .form select,
-.form--compressed select {
+.picker {
+    max-width: 960px;
+    margin: 16px auto 0;
+    padding: 16px clamp(16px, 3vw, 24px) 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.picker h3 {
+    margin-bottom: 4px;
+}
+
+.picker-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0 16px;
+}
+
+.picker label {
+    display: block;
+    margin-top: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.picker > .hint {
+    margin-top: 8px;
+}
+
+/*========== fields ==========*/
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.field-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0 20px;
+}
+
+@media (min-width: 720px) {
+    .field-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.form-section {
+    margin: 10px 0 0;
+    padding: 6px 0 16px;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    min-width: 0;
+}
+
+.form-section legend {
+    padding: 0;
+    margin-bottom: 2px;
+    font-weight: 800;
+    font-size: 1.05rem;
+}
+
+.product-form h2 {
+    padding-bottom: 4px;
+}
+
+.form input[type=text], .form input[type=password], .form input[type=number], .form input[type=search], .form textarea, .form select,
+.picker input, .picker select {
     width: 100%;
     max-width: 360px;
     min-height: 40px;
@@ -88,9 +182,13 @@
     transition: border-color 0.15s, box-shadow 0.15s;
 }
 
-.form--compressed select {
-    width: auto;
-    min-width: 160px;
+/* inside the section grids fields fill their column */
+.form .field input, .form .field select, .picker .field input, .picker .field select {
+    max-width: none;
+}
+
+.picker .pick-product {
+    max-width: 480px;
 }
 
 .form textarea {
@@ -99,13 +197,17 @@
     resize: vertical;
 }
 
-.form input[type=text]:focus, .form input[type=password]:focus, .form input[type=number]:focus, .form textarea:focus, .form select:focus,
-.form--compressed select:focus {
+.form input:focus, .form textarea:focus, .form select:focus,
+.picker input:focus, .picker select:focus {
     border-color: var(--ink);
     box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.55);
 }
 
-.form input::placeholder, .form textarea::placeholder {
+.form input[aria-invalid=true] {
+    border-color: var(--danger);
+}
+
+.form input::placeholder, .form textarea::placeholder, .picker input::placeholder {
     color: #a3a7ad;
 }
 
@@ -117,9 +219,107 @@
 .form input[type=checkbox] {
     width: 18px;
     height: 18px;
-    margin: 6px 0 6px 8px;
-    vertical-align: middle;
+    margin: 0;
+    flex-shrink: 0;
     accent-color: var(--ink);
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    cursor: pointer;
+}
+
+/*========== price preview ==========*/
+
+.price-preview {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 12px;
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+}
+
+.pp-price {
+    font-weight: 800;
+    font-size: 1.25rem;
+}
+
+.pp-price.sale {
+    color: var(--danger);
+}
+
+.pp-price.contact {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink-2);
+}
+
+.pp-old {
+    color: var(--muted);
+    text-decoration: line-through;
+}
+
+.pp-badge {
+    padding: 1px 8px;
+    border-radius: var(--radius-pill);
+    background: var(--danger);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.hint.legacy {
+    color: #9a6700;
+}
+
+/*========== actions ==========*/
+
+.form-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 10px;
+    margin: 12px calc(-1 * clamp(18px, 3vw, 28px)) calc(-1 * clamp(18px, 3vw, 28px));
+    padding: 12px clamp(18px, 3vw, 28px);
+    background: rgba(255, 255, 255, 0.96);
+    border-top: 1px solid var(--border);
+    border-radius: 0 0 var(--radius) var(--radius);
+}
+
+.form-actions .button, .form input[type=submit].button {
+    margin: 0;
+}
+
+.form-actions .unsaved {
+    color: #9a6700;
+    font-weight: 600;
+}
+
+/* unsaved changes: highlight the save button */
+.form-actions .is-dirty {
+    box-shadow: 0 0 0 3px var(--accent);
+}
+
+/* Delete sits at the far end, outlined so it's not mistaken for the main action */
+.form-actions .danger-outline {
+    margin-inline-start: auto;
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid var(--danger);
+}
+
+.form-actions .danger-outline:hover {
+    background: var(--danger);
+    color: #fff;
 }
 
 .form input[type=submit].big, .button.big {
@@ -129,13 +329,33 @@
     width: 200px;
 }
 
-.form input[type=submit].button {
-    margin-top: 12px;
+@media (max-width: 480px) {
+    .form-actions {
+        flex-wrap: nowrap;
+        gap: 6px;
+    }
+
+    .form-actions input[type=submit].big, .form-actions .button.big {
+        flex: 1;
+        width: auto;
+        min-width: 0;
+        padding-inline: 10px;
+    }
+
+    .form-actions .button {
+        padding-inline: 10px;
+        white-space: nowrap;
+    }
+
+    /* no room for the text on phones — the save button turns yellow-outlined instead */
+    .form-actions .unsaved {
+        display: none;
+    }
 }
 
 .form.small input[type=submit].button {
     width: 100%;
-    margin-inline: 0;
+    margin: 12px 0 0;
     background: var(--accent);
     color: var(--accent-ink);
 }
@@ -145,6 +365,7 @@
 }
 
 .form .ql-toolbar.ql-snow {
+    margin-top: 6px;
     border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
@@ -152,18 +373,19 @@
     border-radius: 0 0 var(--radius-sm) var(--radius-sm);
 }
 
-.error {
-    color: var(--danger);
-    font-size: 0.85rem;
+.dialog-detail {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    direction: ltr;
+    text-align: left;
+    word-break: break-word;
 }
 
 /*=============== abroad ============*/
 
-.abroad-edit {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 16px;
+.abroad-edit h2 {
+    padding-bottom: 2px;
 }
 
 .abroad-edit .quill {

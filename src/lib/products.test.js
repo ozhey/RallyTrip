@@ -10,6 +10,7 @@ import {
   pagePrice,
   previewPrice,
   productPath,
+  salePrice,
   resolveCategoryNames,
   subcategoryOptions,
 } from './products';
@@ -43,19 +44,30 @@ describe('filterAndSortProducts', () => {
 });
 
 describe('prices', () => {
-  it('product page: discount shown only with a price', () => {
-    expect(pagePrice({ price: '200', discount: '₪150' })).toEqual({ kind: 'discount', discount: '₪150', price: '200' });
-    expect(pagePrice({ price: '0', discount: '₪150' })).toEqual({ kind: 'contact' });
-    expect(pagePrice({ price: '120', discount: '' })).toEqual({ kind: 'price', price: '120' });
-    expect(pagePrice({})).toEqual({ kind: 'contact' });
+  it('sale price: a positive number below the regular price', () => {
+    expect(salePrice({ price: '200', discount: '150' })).toBe(150);
+    expect(salePrice({ price: '200', discount: 150 })).toBe(150);
+    expect(salePrice({ price: '200', discount: '₪150' })).toBe(150); // older free-text value
+    expect(salePrice({ price: '200', discount: '150 ש"ח' })).toBe(150);
+    expect(salePrice({ price: '200', discount: 'מבצע!' })).toBeNull();
+    expect(salePrice({ price: '200', discount: '10% הנחה' })).toBeNull();
+    expect(salePrice({ price: '200', discount: '₪150 במקום ₪200' })).toBeNull();
+    expect(salePrice({ price: '200', discount: '  ' })).toBeNull();
+    expect(salePrice({ price: '200', discount: '200' })).toBeNull();
+    expect(salePrice({ price: '200', discount: '0' })).toBeNull();
+    expect(salePrice({ price: '0', discount: '150' })).toBeNull();
   });
-  it('preview card: discount text wins even without a price', () => {
-    expect(previewPrice({ price: '0', discount: 'מבצע!' })).toEqual({ kind: 'discount', discount: 'מבצע!' });
+  it('product page / card price', () => {
+    expect(pagePrice({ price: '200', discount: '150' })).toEqual({ kind: 'discount', sale: 150, price: '200', percentOff: 25 });
+    expect(pagePrice({ price: '0', discount: '150' })).toEqual({ kind: 'contact' });
+    expect(pagePrice({ price: '120', discount: '' })).toEqual({ kind: 'price', price: '120' });
+    expect(pagePrice({ price: '120', discount: 'מבצע' })).toEqual({ kind: 'price', price: '120' });
+    expect(pagePrice({})).toEqual({ kind: 'contact' });
     expect(previewPrice({ price: '99' })).toEqual({ kind: 'price', price: '99' });
     expect(previewPrice({ price: 0 })).toEqual({ kind: 'contact' });
   });
-  it('structured-data price prefers a numeric discount', () => {
-    expect(effectivePrice({ price: '200', discount: '₪150' })).toBe(150);
+  it('structured-data price prefers the sale price', () => {
+    expect(effectivePrice({ price: '200', discount: '150' })).toBe(150);
     expect(effectivePrice({ price: '200', discount: 'מבצע' })).toBe(200);
     expect(effectivePrice({ price: '0' })).toBeNull();
   });
@@ -97,7 +109,7 @@ describe('featuredProducts', () => {
   const shop = {
     a: { category: 'garmin', title: 'A', priority: '1', image: 'a.png' },
     b: { category: 'garmin', title: 'B', priority: '5', image: 'b.png' },
-    c: { category: 'roadbooks', title: 'C', priority: '0', discount: '₪10', image: 'c.png' },
+    c: { category: 'roadbooks', title: 'C', priority: '0', price: '20', discount: '10', image: 'c.png' },
     d: { category: 'garmin', title: 'D', priority: '9', image: 'd.png', hide: true },
     e: { category: 'garmin', title: 'E', priority: '7' },
   };

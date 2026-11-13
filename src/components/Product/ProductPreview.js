@@ -5,7 +5,13 @@ import './Product.css';
 
 const PriceTag = ({ product }) => {
     const info = previewPrice(product);
-    if (info.kind === 'discount') return <div className='preview-price sale'>{info.discount}</div>;
+    if (info.kind === 'discount') {
+        return (
+            <div className='preview-price sale'>
+                {`₪${info.sale}`} <span className='preview-old-price'>{`₪${info.price}`}</span>
+            </div>
+        );
+    }
     if (info.kind === 'price') return <div className='preview-price'>{`₪${info.price}`}</div>;
     return <div className='preview-price contact'>צור קשר לקבלת מחיר</div>;
 }

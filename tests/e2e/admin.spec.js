@@ -31,11 +31,10 @@ async function expectDialog(page, text) {
 }
 
 async function openProductForEdit(page) {
-  await page.getByLabel('עריכת מוצר').check();
+  await expect(page.getByLabel('עריכת מוצר')).toBeChecked(); // default tab
   await page.locator('#pick-category').selectOption('roadbook-holders');
   await page.locator('#pick-subcategory').selectOption('mounts');
-  await page.locator('#pick-product').selectOption({ label: TITLE });
-  await page.getByRole('button', { name: 'ערוך מוצר נבחר' }).click();
+  await page.locator('#pick-product').selectOption({ label: TITLE }); // picking opens it
   await expect(page.getByRole('heading', { name: `עדכון מוצר "${TITLE}"` })).toBeVisible();
 }
 
@@ -87,17 +86,42 @@ test('edit the product → change is live without a rebuild', async ({ page, req
   await openProductForEdit(page);
   await expect(page.getByLabel('כותרת')).toHaveValue(TITLE);
   await expect(page.locator('#subcategory')).toHaveValue('mounts');
-  await page.getByLabel('מחיר', { exact: true }).fill('555');
+  await page.getByLabel('מחיר', { exact: true }).fill('500');
+
+  // Sale price must be lower than the regular price.
+  await page.getByLabel(/מחיר מבצע/).fill('600');
+  await page.getByRole('button', { name: 'שמור שינויים' }).click();
+  await expect(page.getByText('מחיר המבצע חייב להיות נמוך מהמחיר הרגיל')).toBeVisible();
+  await page.getByLabel(/מחיר מבצע/).fill('400');
+  await expect(page.locator('.price-preview')).toContainText('₪400');
+  await expect(page.locator('.price-preview')).toContainText('20% הנחה');
+  await expect(page.getByText('יש שינויים שלא נשמרו')).toBeVisible();
   await page.getByRole('button', { name: 'שמור שינויים' }).click();
   await expectDialog(page, 'ההעלאה בוצעה בהצלחה');
+  await expect(page.getByText('יש שינויים שלא נשמרו')).toHaveCount(0); // stays open, clean
 
   if (STATIC) {
-    expect((await findProductInDb(request, TITLE)).price).toBe('555');
+    expect(await findProductInDb(request, TITLE)).toMatchObject({ price: '500', discount: '400' });
     return;
   }
   await page.goto('/products/roadbook-holders/mounts/');
   await page.locator('.preview-container').first().click();
-  await expect(page.locator('.price')).toHaveText('₪555');
+  await expect(page.locator('.price')).toHaveText('₪400');
+  await expect(page.locator('.old-price')).toHaveText('₪500');
+  await expect(page.locator('.percent-off')).toHaveText('20% הנחה');
+});
+
+test('unsaved changes ask before leaving the product', async ({ page }) => {
+  await login(page);
+  await openProductForEdit(page);
+  await page.getByLabel('כותרת').fill(`${TITLE} שינוי`);
+  page.once('dialog', (d) => d.dismiss()); // "stay"
+  await page.getByLabel('מוצר חדש').click(); // controlled radio stays on edit
+  await expect(page.getByLabel('עריכת מוצר')).toBeChecked();
+  await expect(page.getByLabel('כותרת')).toHaveValue(`${TITLE} שינוי`);
+  page.once('dialog', (d) => d.accept()); // "leave without saving"
+  await page.getByRole('button', { name: 'סגור' }).click();
+  await expect(page.getByLabel('כותרת')).toHaveCount(0);
 });
 
 test('delete the product → page is gone', async ({ page, request }) => {

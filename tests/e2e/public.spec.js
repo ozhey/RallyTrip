@@ -61,6 +61,7 @@ test('discounted, out-of-stock product', async ({ page }) => {
   await page.goto('/products/roadbooks/sc/-TestRoadbook2');
   await expect(page.locator('.price')).toHaveText('₪150');
   await expect(page.getByText('₪200')).toHaveCSS('text-decoration-line', 'line-through');
+  await expect(page.locator('.percent-off')).toHaveText('25% הנחה'); // seed holds an older free-text "₪150"
   await expect(page.getByText('המוצר לא קיים במלאי')).toBeVisible();
   await expect(page.getByText('פרטים נוספים')).toHaveCount(0);
 });
