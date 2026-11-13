@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { REQUIRE_VERIFIED_EMAIL } from '../../scripts/build-rules.mjs';
 
 // Talks to the emulators directly (like an attacker with the public API key would).
 const DB = 'http://127.0.0.1:9000';
@@ -44,6 +45,7 @@ test.describe('Firebase security rules', () => {
   });
 
   test('an allowlisted email that is not verified cannot write', async ({ request }) => {
+    test.skip(!REQUIRE_VERIFIED_EMAIL, 'email_verified check is off in scripts/build-rules.mjs');
     const token = await idToken(request, 'unverified-admin@rallytrip.test', 'unverified-password');
     const db = await request.put(`${DB}/abroad.json?${NS}&auth=${token}`, { data: '"hacked"' });
     expect(db.status()).toBe(401);

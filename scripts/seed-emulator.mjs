@@ -36,7 +36,8 @@ export async function seedEmulator(file = 'tests/fixtures/seed.json') {
     });
     if (!signUp.ok) throw new Error(`Creating ${user.email} failed: ${signUp.status} ${await signUp.text()}`);
     if (user === UNVERIFIED_ADMIN) continue;
-    // Console-created accounts are verified; the rules require it.
+    // The rules require a verified email. Note: accounts created in the Firebase console start
+    // UNverified, so real admin accounts must be verified before deploying the rules.
     const { localId } = await signUp.json();
     const verify = await fetch(`${AUTH}/identitytoolkit.googleapis.com/v1/projects/${EMULATOR_PROJECT}/accounts:update`, {
       method: 'POST',

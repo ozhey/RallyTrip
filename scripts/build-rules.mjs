@@ -5,13 +5,19 @@
 //   node scripts/build-rules.mjs              # production: ADMIN_EMAILS from env or .env.local (required)
 //   node scripts/build-rules.mjs --emulator   # local emulators/tests: adds the test admins below
 //
-// Rules: everyone can read; only the listed admin emails can write, and only with a verified email.
-// Accounts are meant to be created from the Firebase console only (sign-up disabled there); the
-// email_verified check keeps the rules safe even if sign-up is ever re-enabled.
+// Rules: everyone can read; only the listed admin emails can write (with REQUIRE_VERIFIED_EMAIL,
+// only once that email is verified). Accounts are meant to be created from the Firebase console
+// only (sign-up disabled there); the email_verified check keeps the rules safe even if sign-up is
+// ever re-enabled.
 // Deploy with `npm run rules:deploy` (it rebuilds for production first) — a plain `firebase deploy`
 // after `npm run emulators` would ship the emulator rules with the test admins.
 
 import { readFile, writeFile } from 'node:fs/promises';
+
+// OFF for now: console-created accounts start unverified, and turning this on locked out the
+// 119raz admin account. Verify every account in ADMIN_EMAILS first, then set this back to true
+// and run `npm run rules:deploy`.
+export const REQUIRE_VERIFIED_EMAIL = false;
 
 export const TEST_ADMIN = 'admin@rallytrip.test';
 // Allowlisted but never verified by the seed script — proves the email_verified check in tests.
@@ -36,17 +42,20 @@ export function parseEmails(value) {
 }
 
 export function databaseCondition(emails) {
-  return `auth != null && auth.token.email_verified === true && (${emails.map((e) => `auth.token.email === '${e}'`).join(' || ')})`;
+  const verified = REQUIRE_VERIFIED_EMAIL ? ' && auth.token.email_verified === true' : '';
+  return `auth != null${verified} && (${emails.map((e) => `auth.token.email === '${e}'`).join(' || ')})`;
 }
 
 export function storageCondition(emails) {
-  return `request.auth != null && request.auth.token.email_verified == true && request.auth.token.email in [${emails.map((e) => `'${e}'`).join(', ')}]`;
+  const verified = REQUIRE_VERIFIED_EMAIL ? ' && request.auth.token.email_verified == true' : '';
+  return `request.auth != null${verified} && request.auth.token.email in [${emails.map((e) => `'${e}'`).join(', ')}]`;
 }
 
 export async function buildRules({ emulator = false } = {}) {
   const emails = parseEmails(await adminEmailsFromEnv());
   if (emulator) {
-    for (const email of [TEST_ADMIN, TEST_UNVERIFIED_ADMIN]) if (!emails.includes(email)) emails.push(email);
+    const testAdmins = REQUIRE_VERIFIED_EMAIL ? [TEST_ADMIN, TEST_UNVERIFIED_ADMIN] : [TEST_ADMIN];
+    for (const email of testAdmins) if (!emails.includes(email)) emails.push(email);
   }
   if (!emails.length) throw new Error('ADMIN_EMAILS is empty — set it in .env.local (comma-separated).');
 
