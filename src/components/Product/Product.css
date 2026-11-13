@@ -85,8 +85,13 @@
     z-index: 1;
 }
 
-.product-information h4, .product-information h2 {
+.product-information h4, .product-information h2, .product-information h1 {
     padding: 7px;
+}
+
+/* Product title is the page's <h1> (SEO) but keeps the original <h2> look. */
+.product-information h1.product-title {
+    font-size: 1.5em;
 }
 
 .data-field {

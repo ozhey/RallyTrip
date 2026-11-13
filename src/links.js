@@ -1,5 +1,7 @@
-const PRODUCTS_ROOT = "/products/"
-const links = [
+// Site product categories. Adding/removing a category is done only here (see README).
+export const PRODUCTS_ROOT = '/products/';
+
+export const links = [
     {
         path: PRODUCTS_ROOT + 'roadbooks', name: 'סיפורי דרך', routes : []
     },
@@ -38,6 +40,4 @@ const links = [
     {
         path: PRODUCTS_ROOT + 'airbag-vests', name: 'אפוד מתנפח', routes : []
     }
-]
-
-export { links };
+];

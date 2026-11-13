@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import './Dropdown.css';
+'use client';
 
+import { useState } from 'react';
+import NavLink from '../NavLink';
+import './Dropdown.css';
 
 const DropdownItem = ({ path, label, routes }) => {
     const [viewSubMenu, setViewSubMenu] = useState(false);
-    let linkItems = routes.map(link =>
-        <li key={link.path}>
-            <NavLink key={link.path} to={link.path} activeClassName='active'>
-                {link.name}
-            </NavLink>
-        </li>)
 
     return (
         <li onMouseEnter={() => setViewSubMenu(true)} onMouseLeave={() => setViewSubMenu(false)}>
-            <NavLink to={path} activeClassName='active' >{label}</NavLink>
+            <NavLink href={path} activeClassName='active'>{label}</NavLink>
             <ul className='submenu'>
-                {viewSubMenu ? linkItems : ''}
+                {viewSubMenu ? routes.map(link =>
+                    <li key={link.path}>
+                        <NavLink href={link.path} activeClassName='active'>
+                            {link.name}
+                        </NavLink>
+                    </li>) : ''}
             </ul>
         </li>
     );

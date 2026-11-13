@@ -1,45 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useHistory, useParams } from 'react-router-dom';
+'use client';
+
+import { usePathname, useRouter } from 'next/navigation';
 import { links } from '../../links';
+import { withSlash, withoutSlash } from '@/lib/site';
 import './MobileMenu.css';
 
-
 const MobileMenu = () => {
-    const [subOptions, setSubOptions] = useState([]);
-    const [mainOptions, setMainOptions] = useState();
-    const [currentCategory, setCurrentCategory] = useState(); //The current category NAME.
-    let history = useHistory();
-    let location = useLocation();
-    let { category, subcategory } = useParams();
+    const router = useRouter();
+    const pathname = withoutSlash(usePathname() ?? '/products');
+    const [, , category, subcategory] = pathname.split('/');
+    const currentLink = links.find(link => pathname.includes(link.path));
+    const subOptions = currentLink ? currentLink.routes : [];
 
-    // This effect builds the category and subcategory lists based on the current url.
-    useEffect(() => {
-        setMainOptions(links.map(link => {
-            if (location.pathname.includes(link.path)) {
-                setSubOptions(link.routes.map((subLink) => {
-                    return <option key={subLink.path} value={subLink.path}>{subLink.name}</option>
-                }))
-                setCurrentCategory(link.name);
-            }
-            return <option key={link.path} value={link.path}>{link.name}</option>
-        }))
-    }, [location.pathname])
-
-    const goToPath = (path) => {
-        history.push(path);
-    }
+    const goToPath = (path) => router.push(withSlash(path));
 
     return (
         <section className='mobile-navigation'>
-            <select value={location.pathname} onChange={(e) => goToPath(e.target.value)}>
+            <select value={pathname} onChange={(e) => goToPath(e.target.value)} aria-label='בחר קטגוריה'>
                 <option value="/products" disabled hidden>בחר קטגוריה</option>
-                <option value={`/products/${category}/${subcategory}`} disabled hidden>{`${currentCategory}`}</option>
-                {mainOptions}
+                <option value={`/products/${category}/${subcategory}`} disabled hidden>{`${currentLink?.name}`}</option>
+                {links.map(link => <option key={link.path} value={link.path}>{link.name}</option>)}
             </select>
-            { subOptions.length ?
-                <select value={location.pathname} onChange={(e) => goToPath(e.target.value)}>
+            {subOptions.length ?
+                <select value={pathname} onChange={(e) => goToPath(e.target.value)} aria-label='בחר תת קטגוריה'>
                     <option value={`/products/${category}`} disabled hidden>בחר תת קטגוריה</option>
-                    {subOptions}
+                    {subOptions.map(subLink => <option key={subLink.path} value={subLink.path}>{subLink.name}</option>)}
                 </select> : <div></div>}
         </section>
     );

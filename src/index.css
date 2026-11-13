@@ -13,6 +13,7 @@ body {
 @font-face {
   font-family: 'Heebo-VariableFont_wght';
   src: local('Heebo-VariableFont_wght'), url(./fonts/Heebo-VariableFont_wght.ttf) format('truetype');
+  font-display: swap;
 }
 
 * {

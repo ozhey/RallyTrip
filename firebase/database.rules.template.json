@@ -1,0 +1,9 @@
+{
+  "rules": {
+    ".read": true,
+    ".write": false,
+    "products": { ".write": "__IS_ADMIN__" },
+    "quill": { ".write": "__IS_ADMIN__" },
+    "abroad": { ".write": "__IS_ADMIN__" }
+  }
+}

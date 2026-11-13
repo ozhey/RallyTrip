@@ -1,25 +1,40 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
 /node_modules
-/.pnp
-.pnp.js
+
+# next.js
+/.next/
+/.next-e2e/
+/out/
+next-env.d.ts
 
 # testing
 /coverage
-db clone.json
+/test-results/
+/playwright-report/
+/playwright/.cache/
 
-# production
-/build
+# backups (DB exports, storage images) — never commit
+/backup/
+db clone*.json
+
+# firebase emulators
+firebase-debug.log
+database-debug.log
+firestore-debug.log
+ui-debug.log
+/emulator-data/
+
+# env
+.env*.local
+.env
 
 # misc
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-src/firebase.js
+
+# generated Firebase rules (contain admin emails) — see scripts/build-rules.mjs
+/firebase/database.rules.json
+/firebase/storage.rules
+
+/.next-e2e-static/
+/.next-static/

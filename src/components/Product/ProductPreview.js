@@ -1,29 +1,33 @@
-    import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+import { previewPrice, productPath } from '@/lib/products';
+import { withSlash } from '@/lib/site';
 import './Product.css';
 
-const ProductPreview = ({ product, id }) => {
-    const { image, title, price = 0, category, subcategory, discount = ""} = product;
-    let priceTag;
-    if (discount !== "") {
-        priceTag = <div style={{ color: 'red', fontWeight: 'bold', fontSize: '17px', marginBottom: '10px' }}>{discount}</div>
-    } else if (price > 0) {
-        priceTag = <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>{`₪${price}`}</div>
-    } else {
-        priceTag = <div style={{ marginBottom: '10px' }}>צור קשר לקבלת מחיר</div>
+const PriceTag = ({ product }) => {
+    const info = previewPrice(product);
+    if (info.kind === 'discount') {
+        return <div style={{ color: 'red', fontWeight: 'bold', fontSize: '17px', marginBottom: '10px' }}>{info.discount}</div>;
     }
+    if (info.kind === 'price') {
+        return <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>{`₪${info.price}`}</div>;
+    }
+    return <div style={{ marginBottom: '10px' }}>צור קשר לקבלת מחיר</div>;
+}
 
+const ProductPreview = ({ product, id }) => {
+    const { image, title } = product;
     return (
-        <Link to={`/products/${category}/${subcategory}/${id}`} >
+        <Link href={withSlash(productPath(id, product))}>
             <article className='preview-container'>
                 <div className='preview-top'>
-                    <img className='preview-img' src={image} alt='product' />
+                    <img className='preview-img' src={image} alt={title} loading='lazy' />
                 </div>
                 <div className='preview-bot'>
                     <div style={{ fontWeight: 'bold', textAlign: 'center' }}>{title}</div>
                     <div className='divider'></div>
-                    {priceTag}
-                    <button className='btn'>לפרטים נוספים</button>
+                    <PriceTag product={product} />
+                    {/* Kept as <button> for visual parity; becomes a styled span in the visual refresh. */}
+                    <button type='button' className='btn' tabIndex={-1}>לפרטים נוספים</button>
                 </div>
             </article>
         </Link>

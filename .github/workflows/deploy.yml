@@ -1,0 +1,78 @@
+name: Deploy to GitHub Pages
+
+# Static build of the site (STATIC_EXPORT=true) published to the gh-pages branch.
+# Product edits made in /admin go live on the next scheduled run that sees changed data.
+on:
+  push:
+    branches: [master]
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: false
+
+env:
+  SITE: https://www.rallytrip.com
+  # Public Firebase web config (it ships in the site's JavaScript anyway).
+  NEXT_PUBLIC_FIREBASE_API_KEY: AIzaSyDukwIPf4Dq16dqVbw4SeoyWugUnPIhYFE
+  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: rally-trip.firebaseapp.com
+  NEXT_PUBLIC_FIREBASE_DATABASE_URL: https://rally-trip.firebaseio.com
+  NEXT_PUBLIC_FIREBASE_PROJECT_ID: rally-trip
+  NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: rally-trip.appspot.com
+  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: '981127527542'
+  NEXT_PUBLIC_FIREBASE_APP_ID: 1:981127527542:web:d6bee115407fff00b1f357
+  NEXT_PUBLIC_SITE_URL: https://www.rallytrip.com
+  NEXT_TELEMETRY_DISABLED: '1'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Check whether the data changed
+        id: check
+        run: |
+          current=$(node scripts/data-version.mjs)
+          deployed=$(curl -fsS "$SITE/data-version.txt?t=$(date +%s)" || echo none)
+          echo "version=$current" >> "$GITHUB_OUTPUT"
+          if [ "$GITHUB_EVENT_NAME" = "schedule" ] && [ "$current" = "$deployed" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Data unchanged ($current) — nothing to deploy."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Deploying data version $current (live: $deployed, event: $GITHUB_EVENT_NAME)."
+          fi
+
+      - name: Install
+        if: steps.check.outputs.changed == 'true'
+        run: npm ci
+
+      - name: Build static site
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          STATIC_EXPORT=true npm run build
+          echo "${{ steps.check.outputs.version }}" > out/data-version.txt
+
+      - name: Publish to gh-pages
+        if: steps.check.outputs.changed == 'true'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
+          cname: www.rallytrip.com
+          # Keep history so a bad deploy can be rolled back by reverting the gh-pages commit.
+          force_orphan: false
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          commit_message: 'deploy: data ${{ steps.check.outputs.version }}'

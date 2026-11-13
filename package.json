@@ -1,42 +1,49 @@
 {
   "name": "rallytrip",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "homepage": "https://www.rallytrip.com",
   "private": true,
-  "dependencies": {
-    "firebase": "^7.21.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-helmet": "^6.1.0",
-    "react-hook-form": "^6.8.6",
-    "react-quill": "^2.0.0-beta.2",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "^4.0.3"
+  "type": "module",
+  "engines": {
+    "node": ">=24"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "dev": "next dev",
+    "dev:emulator": "NEXT_PUBLIC_USE_FIREBASE_EMULATOR=true next dev",
+    "build": "next build",
+    "build:static": "STATIC_EXPORT=true next build",
+    "start": "next start",
+    "serve:static": "node scripts/serve-static.mjs out 3201",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "node scripts/build-rules.mjs --emulator && firebase emulators:exec --project demo-rallytrip \"playwright test\"",
+    "test:e2e:static": "E2E_STATIC=true npm run test:e2e",
+    "emulators": "node scripts/build-rules.mjs --emulator && firebase emulators:start --project demo-rallytrip",
+    "seed": "node scripts/seed-emulator.mjs",
+    "rules": "node scripts/build-rules.mjs",
+    "rules:deploy": "node scripts/build-rules.mjs && firebase deploy --only database,storage --project rally-trip",
+    "backup": "node scripts/backup-storage.mjs"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "firebase": "^13.3.0",
+    "next": "^16.4.6",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-hook-form": "^7.92.0",
+    "react-quill-new": "^3.8.3",
+    "sanitize-html": "^2.18.2",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
-    "gh-pages": "^3.2.3"
+    "@playwright/test": "^1.65.0",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "eslint": "^10.14.0",
+    "eslint-config-next": "^16.4.6",
+    "firebase-tools": "^15.36.0",
+    "jsdom": "^31.0.1",
+    "vitest": "^5.1.0"
   }
 }

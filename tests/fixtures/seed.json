@@ -1,0 +1,37 @@
+{
+  "products": {
+    "-TestRoadbook1": {
+      "category": "roadbooks", "subcategory": "sc", "title": "סיפור דרך לבדיקה",
+      "description": "מסלול מעגלי לבדיקות אוטומטיות", "price": "120", "discount": "", "stock": "4",
+      "priority": "5", "hide": false, "image": "/logo192.png"
+    },
+    "-TestRoadbook2": {
+      "category": "roadbooks", "subcategory": "sc", "title": "סיפור דרך במבצע",
+      "description": "מוצר עם מחיר מבצע", "price": "200", "discount": "₪150", "stock": "0",
+      "priority": "10", "hide": false, "image": "/logo192.png"
+    },
+    "-TestGarminWatch": {
+      "category": "garmin", "subcategory": "watches", "title": "שעון גרמין לבדיקה",
+      "description": "שעון לבדיקות", "price": "0", "discount": "", "stock": "2",
+      "priority": "0", "hide": false, "image": "/logo192.png"
+    },
+    "-TestGarminDevice": {
+      "category": "garmin", "subcategory": "devices", "title": "מכשיר גרמין לבדיקה",
+      "description": "מכשיר לבדיקות", "price": "999", "discount": "", "stock": "1",
+      "priority": "0", "hide": false, "image": "/logo192.png"
+    },
+    "-TestHidden": {
+      "category": "gopro", "subcategory": "sc", "title": "מוצר מוסתר",
+      "description": "לא אמור להופיע", "price": "50", "discount": "", "stock": "1",
+      "priority": "0", "hide": true, "image": "/logo192.png"
+    }
+  },
+  "quill": {
+    "-TestRoadbook1": "<p class=\"ql-align-right ql-direction-rtl\"><strong>פרטים מלאים על המסלול</strong></p><ul><li class=\"ql-align-right ql-direction-rtl\">פריט ראשון</li><li class=\"ql-align-right ql-direction-rtl\">פריט שני</li></ul><p><img src=x onerror=alert(1)></p><script>alert(1)</script>",
+    "-TestRoadbook2": "<p class=\"ql-align-right ql-direction-rtl\"><br></p>",
+    "-TestGarminWatch": "",
+    "-TestGarminDevice": "",
+    "-TestHidden": ""
+  },
+  "abroad": "<p class=\"ql-align-right\">הראלי הבא: מרוקו 2027</p>"
+}

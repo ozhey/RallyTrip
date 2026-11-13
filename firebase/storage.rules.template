@@ -1,0 +1,16 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Everyone can read (product images are public).
+    match /{allPaths=**} {
+      allow read: if true;
+    }
+    // Only the site admins can upload/replace/delete product images.
+    match /products/{productId}/{file} {
+      allow delete: if __IS_ADMIN__;
+      allow create, update: if __IS_ADMIN__
+        && request.resource.contentType.matches('image/.*')
+        && request.resource.size < 10 * 1024 * 1024;
+    }
+  }
+}

@@ -1,8 +1,6 @@
-import React from 'react';
 import image from '../../images/navguide1.png';
 import image1 from '../../images/navguide2.png';
 import image2 from '../../images/navguide3.png';
-import { Helmet } from 'react-helmet';
 import MakeContact from '../../components/Product/MakeContact';
 import './NavGuide.css';
 
@@ -10,15 +8,10 @@ const NavGuide = () => {
 
     return (
         <div className='page-container'>
-            <Helmet>
-                <title>הדרכות ניווט - Rally Trip</title>
-                <meta name="description" content=" הדרכות ניווט באמצעות ספר דרך אישיות או קבוצתיות. כל ההדרכות מועברות על ידי רז הימן." />
-
-            </Helmet>
             <h1 style={{ textAlign: 'center', padding: '15px 0px 20px' }}>ניווט באמצעות ספר דרך</h1>
             <article className='navguide-container'>
                 <div className='navguide-item reverse'>
-                    <img src={image1} alt='desc' className='navguide-image reverse' />
+                    <img src={image1.src} alt='הדרכת תאוריה' className='navguide-image reverse' />
                     <div className='navguide-text'>
                         <h2>הדרכת תאוריה</h2>
                         <ul>
@@ -29,7 +22,7 @@ const NavGuide = () => {
                     </div>
                 </div>
                 <div className='navguide-item'>
-                    <img src={image2} alt='desc' className='navguide-image' />
+                    <img src={image2.src} alt='הדרכה מעשית' className='navguide-image' />
                     <div className='navguide-text'>
                         <h2>הדרכה מעשית</h2>
                         <ul>
@@ -41,7 +34,7 @@ const NavGuide = () => {
                     </div>
                 </div>
                 <div className='navguide-item reverse'>
-                    <img src={image} alt='desc' className='navguide-image reverse' />
+                    <img src={image.src} alt='מחירון הדרכות' className='navguide-image reverse' />
                     <div className='navguide-text'>
                         <h2>מחירון</h2>
                         <ul>

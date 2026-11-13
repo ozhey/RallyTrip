@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import arrow from '../../icons/arrow.png'
+'use client';
+
+import { useState } from 'react';
+import arrow from '../../icons/arrow.png';
 import './TreeView.css';
 
 const TreeView = ({ label, children, labelClass }) => {
@@ -9,7 +11,7 @@ const TreeView = ({ label, children, labelClass }) => {
         <>
             <div className={labelClass} style={{ display: 'flex' }} onClick={() => setViewItems(prevState => !prevState)}>
                 {label}
-                <img src={arrow} alt='arrow' style={{ height: '20px', marginRight: 'auto' }} className={viewItems ? 'rotate-up' : 'rotate-down'} />
+                <img src={arrow.src} alt='' style={{ height: '20px', marginRight: 'auto' }} className={viewItems ? 'rotate-up' : 'rotate-down'} />
             </div>
             <div className={viewItems ? 'show-tree' : 'hide-tree'}>
                 <ul style={{ overflow: 'hidden' }} className={viewItems ? 'show-tree' : 'hide-tree'}>

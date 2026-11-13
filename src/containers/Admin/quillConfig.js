@@ -10,12 +10,16 @@ const modules = {
     ],
 }
 
+// Quill 2: bullet/ordered lists are both the 'list' format.
 const formats = [
     'size',
     'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet', 'indent',
+    'list', 'indent',
     'link', 'image', 'video', 'direction',
     'color', 'background', 'align'
 ]
 
-export { modules, formats }
+// Blank RTL document — used to reset the editor.
+const EMPTY_EDITOR_VALUE = '<p class="ql-align-right ql-direction-rtl"><br></p>';
+
+export { modules, formats, EMPTY_EDITOR_VALUE }

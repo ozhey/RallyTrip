@@ -1,107 +1,102 @@
-import React, { useState, useEffect } from 'react';
-import { fireAuth, firebase } from '../../firebase'
-import { useForm } from "react-hook-form";
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
+import {
+    browserLocalPersistence,
+    inMemoryPersistence,
+    onAuthStateChanged,
+    setPersistence,
+    signInWithEmailAndPassword,
+    signOut as firebaseSignOut,
+} from 'firebase/auth';
+import { getFirebase } from '@/lib/firebase/client';
 import Loader from '../../components/Loader/Loader';
 import ProductManager from './ProductManager';
 import AbroadEdit from './AbroadEdit';
 import './Admin.css';
 
 const Admin = () => {
-    const { register, handleSubmit, errors, setError, clearErrors } = useForm();
-    const { register: register2, watch: watch2 } = useForm(); // The menu form
-    const [isSignedIn, setIsSignedIn] = useState(false);
+    const { auth } = getFirebase();
+    const { register, handleSubmit, formState: { errors }, setError, clearErrors } = useForm();
+    const { register: register2, control: menuControl } = useForm(); // The menu form
+    const [user, setUser] = useState(null);
+    const [authChecked, setAuthChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const action = watch2("action");
-    let actionComponent = null;
+    const action = useWatch({ control: menuControl, name: 'action' });
 
-    const onSubmit = ({ email, password, persistence }) => {
+    const onSubmit = async ({ email, password, persistence }) => {
         setIsLoading(true);
-        let authPersistence;
-        if (persistence === true) {
-            authPersistence = firebase.auth.Auth.Persistence.LOCAL;
-        } else {
-            authPersistence = firebase.auth.Auth.Persistence.NONE
+        try {
+            await setPersistence(auth, persistence ? browserLocalPersistence : inMemoryPersistence);
+            await signInWithEmailAndPassword(auth, email, password);
+        } catch (error) {
+            console.log(`Error code: ${error.code}`);
+            setError('login', { type: 'manual', message: 'אימייל או סיסמה שגויים' });
+        } finally {
+            setIsLoading(false);
         }
-        fireAuth.setPersistence(authPersistence)
-            .then(() => fireAuth.signInWithEmailAndPassword(email, password))
-            .then(setIsLoading(false))
-            .catch((error) => {
-                console.log(`Error code: ${error.code}`);
-                console.log(`Error message: ${error.message}`)
-                setError("login", {
-                    type: "manual",
-                    message: "אימייל או סיסמה שגויים"
-                });
-            });
     }
 
     const signOut = () => {
-        fireAuth.signOut().then(function () {
-            console.log('signed out successfully')
-        }).catch(function (error) {
-            console.log(error)
-        });
+        firebaseSignOut(auth).catch((error) => console.log(error));
     }
 
-    useEffect(() => {
-        fireAuth.onAuthStateChanged(function (user) {
-            if (user) {
-                console.log('You are logged in!')
-                setIsSignedIn(user);
-            } else {
-                console.log('No user is logged in.')
-                setIsSignedIn(false);
-            }
-        });
-    }, [])
+    useEffect(() => onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+        setAuthChecked(true);
+    }), [auth]);
 
-    if (action === "add product" || action === "update product")
-        actionComponent = <ProductManager action={action} />
-    else if (action === "set rally abroad")
+    let actionComponent = null;
+    if (action === 'add product' || action === 'update product')
+        actionComponent = <ProductManager key={action} action={action} /> // key: switching add/update starts fresh
+    else if (action === 'set rally abroad')
         actionComponent = <AbroadEdit />
 
+    if (!authChecked) {
+        return <article className='page-container'><Loader /></article>;
+    }
 
-    if (isSignedIn) {
+    if (user) {
         return (
             <article className='page-container'>
                 <h2>עמוד מנהל</h2>
                 <button className='button' onClick={signOut}>התנתק</button>
                 <form className="form--compressed">
-                    <input name="action" type="radio" value="add product" ref={register2} />
-                    <label>מוצר חדש</label>
-                    <input name="action" type="radio" value="update product" ref={register2} />
-                    <label>עריכת מוצר</label>
-                    <input name="action" type="radio" value="set rally abroad" ref={register2} />
-                    <label>עריכת תוכן ראליים בחו"ל</label>
+                    <input id="action-add" type="radio" value="add product" {...register2('action')} />
+                    <label htmlFor="action-add">מוצר חדש</label>
+                    <input id="action-update" type="radio" value="update product" {...register2('action')} />
+                    <label htmlFor="action-update">עריכת מוצר</label>
+                    <input id="action-abroad" type="radio" value="set rally abroad" {...register2('action')} />
+                    <label htmlFor="action-abroad">עריכת תוכן ראליים בחו&quot;ל</label>
                 </form>
                 {actionComponent}
             </article>
         );
-    } else {
-        return (
-            <article className='page-container'>
-                <form onSubmit={handleSubmit(onSubmit)} className='form small'>
-                    <h2 style={{ padding: '0px 0px 10px' }}>כניסת מנהל</h2>
-                    <label>אימייל</label>
-                    <input type="text" name="email" ref={register({ required: true })} placeholder="אימייל" />
-                    {errors.email && <span className="error">יש להכניס אימייל</span>}
-                    <label>סיסמא</label>
-                    <input type='password' name="password" ref={register({ required: true })} placeholder="סיסמא" />
-                    {errors.password && <span className="error">יש להכניס סיסמא</span>}
-                    <div>
-                        <input type="checkbox" name="persistence" defaultChecked={true} ref={register} />
-                        <label>הישאר מחובר</label>
-                    </div>
-                    {isLoading ?
-                        <Loader />
-                        : <input type="submit" value="התחבר" className="button" onClick={() => clearErrors("login")} />
-                    }
-                    {errors.login && <span className="error">{errors.login.message}</span>}
-                </form>
-            </article>
-        );
     }
-}
 
+    return (
+        <article className='page-container'>
+            <form onSubmit={handleSubmit(onSubmit)} className='form small'>
+                <h2 style={{ padding: '0px 0px 10px' }}>כניסת מנהל</h2>
+                <label htmlFor="email">אימייל</label>
+                <input id="email" type="text" autoComplete="username" {...register('email', { required: true })} placeholder="אימייל" />
+                {errors.email && <span className="error">יש להכניס אימייל</span>}
+                <label htmlFor="password">סיסמא</label>
+                <input id="password" type='password' autoComplete="current-password" {...register('password', { required: true })} placeholder="סיסמא" />
+                {errors.password && <span className="error">יש להכניס סיסמא</span>}
+                <div>
+                    <input id="persistence" type="checkbox" defaultChecked={true} {...register('persistence')} />
+                    <label htmlFor="persistence">הישאר מחובר</label>
+                </div>
+                {isLoading ?
+                    <Loader />
+                    : <input type="submit" value="התחבר" className="button" onClick={() => clearErrors('login')} />
+                }
+                {errors.login && <span className="error">{errors.login.message}</span>}
+            </form>
+        </article>
+    );
+}
 
 export default Admin;

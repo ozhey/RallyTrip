@@ -1,56 +1,53 @@
-import React, { useState, useEffect } from 'react';
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import SideDrawer from '../SideDrawer/SideDrawer';
 import BackDrop from '../BackDrop/BackDrop';
-import { NavLink, Link, useLocation } from 'react-router-dom';
+import NavLink from '../NavLink';
 import Dropdown from './Dropdown';
 import logo from '../../images/logos/logoGlow.png';
 import './NavBar.css';
 
-
 const NavBar = () => {
-    const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
-    const [showDropdown, setShowDropdown] = useState(false)
-    let location = useLocation();
-    let backdrop, dropdown;
-
-    if (sideDrawerOpen) {
-        backdrop = <BackDrop setWindowOpen={setSideDrawerOpen} />
-    }
-
-    if (showDropdown) {
-        dropdown = <Dropdown />
-    }
-
-    // Close the side drawer everytime the url changes
-    useEffect(() => {
-        setSideDrawerOpen(false);
-    }, [location]);
+    const pathname = usePathname();
+    // The drawer is open only for the path it was opened on, so navigating closes it.
+    const [drawerOpenedOn, setDrawerOpenedOn] = useState(null);
+    const [showDropdown, setShowDropdown] = useState(false);
+    const sideDrawerOpen = drawerOpenedOn === pathname;
+    const closeDrawer = () => setDrawerOpenedOn(null);
 
     return (
         <>
             <SideDrawer sideDrawerOpen={sideDrawerOpen} />
-            {backdrop}
+            {sideDrawerOpen ? <BackDrop setWindowOpen={closeDrawer} /> : null}
             <div id='navbar'>
-                <button className='hamburger' onClick={() => setSideDrawerOpen((prevState) => !prevState)}>
+                <button
+                    className='hamburger'
+                    aria-label='תפריט'
+                    aria-expanded={sideDrawerOpen}
+                    onClick={() => setDrawerOpenedOn(sideDrawerOpen ? null : pathname)}
+                >
                     <div className='line'></div>
                     <div className='line'></div>
                     <div className='line'></div>
                 </button>
                 <ul className='nav-links'>
-                    <li><NavLink exact to="/" activeClassName="nav-active">בית</NavLink></li>
+                    <li><NavLink exact href="/" activeClassName="nav-active">בית</NavLink></li>
                     <li onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)}>
-                        <NavLink to="/products" activeClassName="nav-active" >
+                        <NavLink href="/products" activeClassName="nav-active">
                             מוצרים
                         </NavLink>
-                        {dropdown}
+                        {showDropdown ? <Dropdown /> : null}
                     </li>
                 </ul>
-                <Link to='/'>
-                    <img src={logo} alt='Rally Trip' className='logo' />
+                <Link href='/'>
+                    <img src={logo.src} alt='Rally Trip' className='logo' />
                 </Link>
                 <ul className='nav-links'>
-                    <li><NavLink to="/rally-abroad" activeClassName="nav-active">מרוצים בחו"ל</NavLink></li>
-                    <li><NavLink to="/nav-guide" activeClassName="nav-active">הדרכות ניווט</NavLink></li>
+                    <li><NavLink href="/rally-abroad" activeClassName="nav-active">מרוצים בחו&quot;ל</NavLink></li>
+                    <li><NavLink href="/nav-guide" activeClassName="nav-active">הדרכות ניווט</NavLink></li>
                 </ul>
             </div>
         </>

@@ -1,53 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import ReactQuill from 'react-quill';
-import { fireDb } from '../../firebase'
+'use client';
+
+import { useEffect, useState } from 'react';
+import ReactQuill from 'react-quill-new';
+import { get, ref, update } from 'firebase/database';
+import { getFirebase } from '@/lib/firebase/client';
+import { normalizeQuillSpaces } from '@/lib/quillHtml';
 import Loader from '../../components/Loader/Loader';
 import Dialog from '../../components/Dialog/Dialog';
-import { modules, formats } from './quillConfig'
-import 'react-quill/dist/quill.snow.css';
+import { modules, formats, EMPTY_EDITOR_VALUE } from './quillConfig';
+import { PUBLISH_NOTE, refreshPublicPages } from './refresh';
+import 'react-quill-new/dist/quill.snow.css';
 import './Admin.css';
 
 const AbroadEdit = () => {
-    const [editorValue, setEditorValue] = useState('<p class="ql-align-right ql-direction-rtl"><br></p>'); //Quill data
-    const [isLoading, setIsLoading] = useState(false); // Loading indicator
-    const [dialogContent, setDialogContent] = useState(false); // Dialog handler
+    const { db, auth } = getFirebase();
+    const [editorValue, setEditorValue] = useState(EMPTY_EDITOR_VALUE);
+    const [isLoading, setIsLoading] = useState(false);
+    const [dialogContent, setDialogContent] = useState(false);
 
-    const onSubmit = () => {
-        setIsLoading(true)
-        let abroadRef = fireDb.ref()
-        abroadRef.update({ abroad: editorValue }, (error) => {
-            if (error) {
-                setIsLoading(false);
-                setDialogContent("תקלה :" + error);
-            } else {
-                setIsLoading(false);
-                setDialogContent("העדכון בוצע בהצלחה");
-            }
-        });
+    const onSubmit = async () => {
+        setIsLoading(true);
+        try {
+            await update(ref(db), { abroad: normalizeQuillSpaces(editorValue) });
+            await refreshPublicPages(auth, ['abroad']);
+            setDialogContent('העדכון בוצע בהצלחה.' + PUBLISH_NOTE);
+        } catch (error) {
+            setDialogContent('תקלה :' + error);
+        } finally {
+            setIsLoading(false);
+        }
     }
 
-
-    // reset the quill data to the current data
+    // Load the current content once (a live listener would overwrite in-progress edits).
     useEffect(() => {
-        fireDb.ref(`abroad`).on('value', snapshot => {
-            if (snapshot.val() != null) {
-                setEditorValue(snapshot.val())
-            }
-        })
-    }, [])
-
+        let cancelled = false;
+        get(ref(db, 'abroad')).then((snapshot) => {
+            if (!cancelled && snapshot.val() != null) setEditorValue(snapshot.val());
+        });
+        return () => { cancelled = true; };
+    }, [db]);
 
     return (
         <article className='abroad-edit'>
             <div>
                 <ReactQuill theme="snow" value={editorValue} onChange={setEditorValue} modules={modules} formats={formats} />
-                <button className='button green big' onClick={() => onSubmit()}>עדכן</button>
+                <button className='button green big' onClick={onSubmit}>עדכן</button>
             </div>
             {isLoading ? <Loader fullscreen /> : null}
             <Dialog dialogContent={dialogContent} setDialogContent={setDialogContent} />
         </article>
     );
 }
-
 
 export default AbroadEdit;
