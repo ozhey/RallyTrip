@@ -82,7 +82,8 @@ function productJsonLd({ id, product, category, subcategory }) {
       url,
       sku: id,
       brand: { '@type': 'Brand', name: 'Rally Trip' },
-      category: [categoryName, subcategoryName].filter(Boolean).join(' > ') || undefined,
+      // No `category`: Google validates it against its product taxonomy and rejects free text.
+      // The category path is already in the BreadcrumbList below.
       offers:
         price !== null
           ? {
