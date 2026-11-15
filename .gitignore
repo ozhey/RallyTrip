@@ -36,3 +36,7 @@ npm-debug.log*
 # generated Firebase rules (contain admin emails) — see scripts/build-rules.mjs
 /firebase/database.rules.json
 /firebase/storage.rules
+
+# Claude Code: local preview config and personal settings
+.claude/launch.json
+.claude/settings.local.json
