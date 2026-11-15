@@ -117,7 +117,7 @@ test('edit the product → change is live without a rebuild', async ({ page, req
 
 test('product list shows status badges', async ({ page }) => {
   await login(page);
-  await expect(productRow(page, 'סיפור דרך במבצע').locator('.badge')).toHaveText(['מבצע', 'אזל מהמלאי']);
+  await expect(productRow(page, 'סיפור דרך במבצע').locator('.badge')).toHaveText(['עדיפות 10', 'מבצע', 'אזל מהמלאי']);
   await expect(productRow(page, 'מוצר מוסתר').locator('.badge')).toHaveText(['מוסתר']);
   await expect(productRow(page, 'מוצר מוסתר')).toHaveClass(/is-hidden/);
   await page.getByLabel('קטגוריה').selectOption('garmin');
